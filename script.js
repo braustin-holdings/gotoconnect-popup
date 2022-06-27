@@ -35,7 +35,7 @@ let portalUserAuthToken
     //The users toekn from to the smaller app
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString)
-    goToConnectAuthToken = urlParams.get('gotoconnectauth')
+    goToConnectAuthToken = urlParams.get('gotoconnecttoken')
     portalUserAuthToken = urlParams.get('portalusertoken')
     console.log('Portal User Token', portalUserAuthToken)
 
