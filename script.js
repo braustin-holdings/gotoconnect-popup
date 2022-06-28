@@ -1,4 +1,3 @@
-
 let socket;
 let ready = false;
 let lines = "";
@@ -48,14 +47,22 @@ let portalUserAuthToken
       socket = new WebSocket(session.ws);
       socket.addEventListener("message", onMessage);
       ready = true
-      lines = lines
   }
 
   const lookup = async (eventObj) => {
-    const lookupResponse =  await API.Pipedrive.searchPipeDriveForUser(eventObj)
-    let response = lookupResponse.data
-
-    let { type, id } = response.data.items[0].item
+    console.log(portalUserAuthToken)
+    const lookupResponse =  await fetch('http://localhost:3001/api/pipedrive', {
+      headers: {
+        Authorization: `Bearer ${portalUserAuthToken}`,
+        "Content-Type": "application/json",
+      },
+      method: 'POST',
+      body: JSON.stringify(eventObj)
+    })
+    let response = lookupResponse
+    const json = await response.json()
+    console.log(json)
+    let { type, id } = json.data.items[0].item
     if(type === 'deal'){
       window.open(`https://braustinmobilehomes.pipedrive.com/deal/${id}`, '_blank')
     } else if (type === 'lead'){
