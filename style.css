@@ -1,3 +1,55 @@
-.congrats {
-    color: red;
+html {
+    background-color: #1b406a;
+}
+
+.title {
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+}
+
+.box {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background-color: white;
+    margin: 10px 30px 30px 30px;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+#sessionTitle {
+    font-weight: bold;
+    font-size: 20px;
+
+}
+#lineInfoTitle {
+    font-weight: bold;
+    font-size: 20px;
+}
+#subscriberTitle {
+    font-weight: bold;
+    font-size: 20px;
+}
+#foundDataTitle {
+    font-weight: bold;
+}
+
+#callerTitle {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#callDirection {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#calleeTitle {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#callDirectionTitle {
+    font-weight: bold;
+    font-size: 20px;
 }
