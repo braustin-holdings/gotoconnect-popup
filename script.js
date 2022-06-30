@@ -72,8 +72,7 @@ const lookup = async (eventObj) => {
   let callLogContainer = document.getElementById('callLogContainer')
   console.log("Call Event Array", callEventArray)
   let message = json.message;
-  let data = json.data.data.items;
-  console.log("Your Message", message, data.length);
+  let data = json?.data?.data.items;
   let callLogArray = []
   console.log('callEventArray Length is.....', callEventArray.length)
   console.log("Call Log Array", callLogArray)
@@ -107,8 +106,7 @@ const lookup = async (eventObj) => {
         let foundInformationMessage = document.createElement("div");
       
         if (data.length <= 1) {
-          let message = call.message
-          console.log(message)
+       
           foundInformationMessage.innerText = message
           callDirectionDiv.appendChild(foundInformationMessage)
           // foundInformationMessage.appendChild(callDirectionDiv)
@@ -138,6 +136,7 @@ const lookup = async (eventObj) => {
     }
   })
   let { type, id } = json.data.data.items[0].item;
+  console.log('Your my type', type)
   if (type === "deal") {
     window.open(
       `https://braustinmobilehomes.pipedrive.com/deal/${id}`,
@@ -148,7 +147,11 @@ const lookup = async (eventObj) => {
       `https://braustinmobilehomes.pipedrive.com/leads/inbox/${id}`,
       "_blank"
     );
-  } else {
+    
+  } else if (type === 'person'){
+     window.open(`https://braustinmobilehomes.pipedrive.com/person/${id}`) 
+  }
+  else {
     console.log("We couldnt determine the type. Sorry...");
   }
 };
