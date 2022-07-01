@@ -49,7 +49,7 @@ async function callApis() {
   let stringifiedSubscription = JSON.stringify(subscription);
 
   document.getElementById("subscribeInfo").innerText = stringifiedSubscription;
-  console.log("Gettign Subscription Info", subscription);
+  console.log("Getting Subscription Info", subscription);
   socket = new WebSocket(session.ws);
   socket.addEventListener("message", onMessage);
   ready = true;
@@ -87,51 +87,71 @@ const lookup = async (eventObj) => {
       callLogBox.style.borderRadius = '10px'
       callLogBox.style.padding = '5px'
       callLogContainer.appendChild(callLogBox)
+
+      let callerTitle = document.createElement('div')
+      callerTitle.innerText = 'Caller Information:'
+      callerTitle.classList.add('title')
+      callLogBox.appendChild(callerTitle)
       let callerDiv = document.createElement('div')
-      
       let callerData = JSON.stringify(call.caller)
       callerDiv.innerText = callerData
+      callerDiv.classList.add('callInformation')
       callLogBox.appendChild(callerDiv)
-  
+      
+      let calleeTitle = document.createElement('div')
+      calleeTitle.innerText = 'Callee Information:'
+      calleeTitle.classList.add('title')
+      callLogBox.appendChild(calleeTitle)
       let calleeDiv = document.createElement('div')
       let calleeData = JSON.stringify(call.callee)
       calleeDiv.innerText = calleeData
-      callerDiv.appendChild(calleeDiv)
+      calleeDiv.classList.add('callInformation')
+      callLogBox.appendChild(calleeDiv)
   
+      let directionTitle = document.createElement('div')
+      directionTitle.innerText = 'Call Direction:'
+      directionTitle.classList.add('title')
+      callLogBox.appendChild(directionTitle)
       let callDirectionDiv = document.createElement('div')
+      callDirectionDiv.classList.add('callInformation')
       callDirectionDiv.innerText = call.direction
       console.log(callDirectionDiv)
-      calleeDiv.appendChild(callDirectionDiv)
+      callLogBox.appendChild(callDirectionDiv)
       
         let foundInformationMessage = document.createElement("div");
       
         if (data.length <= 1) {
-       
+          let messageTitle = document.createElement('div')
+          messageTitle.innerText = 'Result Message:'
+          messageTitle.classList.add('title')
+          callLogBox.appendChild(messageTitle)
+
           foundInformationMessage.innerText = message
-          callDirectionDiv.appendChild(foundInformationMessage)
+          foundInformationMessage.classList.add('callInformation')
+          callLogBox.appendChild(foundInformationMessage)
           // foundInformationMessage.appendChild(callDirectionDiv)
       
           let dataDiv =  document.createElement("div")
           let foundDealsOrLeads = JSON.stringify(call.data.data) 
           dataDiv.innerText = foundDealsOrLeads;
-  
+          dataDiv.classList.add('callInformation')
           foundInformationMessage.appendChild(dataDiv)
       
         } else {
          
-          // data.forEach((dealOrLead) => {
-          //   let divContainer = document.createElement('div')
-          //   divContainer.style.borderBottom = '3px solid lightblue'
-          //   divContainer.style.padding = '3px'
+          data.forEach((dealOrLead) => {
+            let divContainer = document.createElement('div')
+            divContainer.style.borderBottom = '3px solid lightblue'
+            divContainer.style.padding = '3px'
       
-          //   console.log("We are doing the for reach");
-          //   let stringifiedDealOrLead = JSON.stringify(dealOrLead);
-          //   let dealOrLeadDiv = document.createElement("div");
-          //   dealOrLeadDiv.innerText = stringifiedDealOrLead;
-          //   foundInformationMessage.appendChild(divContainer);
-          //   divContainer.appendChild(dealOrLeadDiv)
+            console.log("We are doing the for reach");
+            let stringifiedDealOrLead = JSON.stringify(dealOrLead);
+            let dealOrLeadDiv = document.createElement("div");
+            dealOrLeadDiv.innerText = stringifiedDealOrLead;
+            foundInformationMessage.appendChild(divContainer);
+            divContainer.appendChild(dealOrLeadDiv)
       
-          // });
+          });
         }
     }
   })

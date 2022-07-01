@@ -2,11 +2,22 @@ html {
     background-color: #1b406a;
 }
 
-.title {
+#callLogs {
     font-size: 50px;
-    font-weight: bold;
-    text-align: center;
     color: white;
+    text-align: center;
+    font-weight: bold;
+
+}
+
+.callInformation {
+    font-size: 18px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    display: inline-block;
 }
 
 .box {
