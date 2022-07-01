@@ -9,14 +9,22 @@ let portalUserAuthToken;
 let callEventArray = []
 const nextURL = "/"
 
+
 const setEvents = (event) => {
   events.push(event);
   ready = true;
 };
 
+
+
+const closeWebSocket = () => {
+  socket.close()
+  window.close()
+}
+
 const onMessage = async (event) => {
   const data = JSON.parse(event.data);
-
+  console.log(data)
   //Waiting for an announce type to avoid duplicate lookup function calls.
   if (data.type === "announce") {
     setEvents(data);
@@ -73,9 +81,7 @@ const lookup = async (eventObj) => {
   console.log("Call Event Array", callEventArray)
   let message = json.message;
   let data = json?.data?.data.items;
-  let callLogArray = []
-  console.log('callEventArray Length is.....', callEventArray.length)
-  console.log("Call Log Array", callLogArray)
+ 
   callEventArray.forEach((call, index) => {
     console.log("Index", index)
     if(index + 1 < callEventArray.length){
@@ -138,20 +144,21 @@ const lookup = async (eventObj) => {
           foundInformationMessage.appendChild(dataDiv)
       
         } else {
-         
-          data.forEach((dealOrLead) => {
-            let divContainer = document.createElement('div')
-            divContainer.style.borderBottom = '3px solid lightblue'
-            divContainer.style.padding = '3px'
-      
-            console.log("We are doing the for reach");
-            let stringifiedDealOrLead = JSON.stringify(dealOrLead);
-            let dealOrLeadDiv = document.createElement("div");
-            dealOrLeadDiv.innerText = stringifiedDealOrLead;
-            foundInformationMessage.appendChild(divContainer);
-            divContainer.appendChild(dealOrLeadDiv)
-      
-          });
+          let messageTitle = document.createElement('div')
+          messageTitle.innerText = 'Result Message:'
+          messageTitle.classList.add('title')
+          callLogBox.appendChild(messageTitle)
+
+          foundInformationMessage.innerText = message
+          foundInformationMessage.classList.add('callInformation')
+          callLogBox.appendChild(foundInformationMessage)
+          data.forEach((person) => {
+            let personInfo = JSON.stringify(person.item)
+            let personDiv = document.createElement('div')
+            personDiv.innerText = personInfo
+            callLogBox.appendChild(personDiv)
+          })
+          console.log(data)
         }
     }
   })

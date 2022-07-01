@@ -17,9 +17,21 @@ html {
 .title {
     font-size: 20px;
     font-weight: bold;
-    display: inline-block;
+}
+.closeButton {
+    background: lightgreen;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 25px;
+    border: 1px solid black;
+    
 }
 
+.buttonContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 30px;
+}
 .box {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background-color: white;
@@ -41,9 +53,7 @@ html {
     font-weight: bold;
     font-size: 20px;
 }
-#foundDataTitle {
-    font-weight: bold;
-}
+
 
 #callerTitle {
     font-weight: bold;
