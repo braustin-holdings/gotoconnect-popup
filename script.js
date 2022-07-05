@@ -24,7 +24,7 @@ const closeWebSocket = () => {
 
 const onMessage = async (event) => {
   const data = JSON.parse(event.data);
-  console.log(data)
+  
   //Waiting for an announce type to avoid duplicate lookup function calls.
   if (data.type === "announce") {
     setEvents(data);
@@ -52,19 +52,16 @@ async function callApis() {
   let stringifiedSessionInfo = JSON.stringify(session);
 
   document.getElementById("sessionInfo").innerText = stringifiedSessionInfo;
-  console.log("Getting Session Info...", session);
   subscription = await subscribe();
   let stringifiedSubscription = JSON.stringify(subscription);
 
   document.getElementById("subscribeInfo").innerText = stringifiedSubscription;
-  console.log("Getting Subscription Info", subscription);
   socket = new WebSocket(session.ws);
   socket.addEventListener("message", onMessage);
   ready = true;
 }
 
 const lookup = async (eventObj) => {
-  console.log(portalUserAuthToken);
   const lookupResponse = await fetch("http://localhost:3001/api/pipedrive", {
     method: "POST",
     body: JSON.stringify(eventObj),
@@ -75,15 +72,12 @@ const lookup = async (eventObj) => {
   });
   let response = lookupResponse;
   const json = await response.json();
-  console.log(json)
   callEventArray.push(json)
   let callLogContainer = document.getElementById('callLogContainer')
-  console.log("Call Event Array", callEventArray)
   let message = json.message;
   let data = json?.data?.data.items;
  
   callEventArray.forEach((call, index) => {
-    console.log("Index", index)
     if(index + 1 < callEventArray.length){
       return
     } else {
@@ -121,12 +115,12 @@ const lookup = async (eventObj) => {
       let callDirectionDiv = document.createElement('div')
       callDirectionDiv.classList.add('callInformation')
       callDirectionDiv.innerText = call.direction
-      console.log(callDirectionDiv)
+     
       callLogBox.appendChild(callDirectionDiv)
       
         let foundInformationMessage = document.createElement("div");
       
-        if (data.length <= 1) {
+        if (data?.length <= 1) {
           let messageTitle = document.createElement('div')
           messageTitle.innerText = 'Result Message:'
           messageTitle.classList.add('title')
@@ -158,12 +152,12 @@ const lookup = async (eventObj) => {
             personDiv.innerText = personInfo
             callLogBox.appendChild(personDiv)
           })
-          console.log(data)
+          
         }
     }
   })
   let { type, id } = json.data.data.items[0].item;
-  console.log('Your my type', type)
+ 
   if (type === "deal") {
     window.open(
       `https://braustinmobilehomes.pipedrive.com/deal/${id}`,
@@ -229,4 +223,4 @@ async function subscribe() {
 }
 
 callApis();
-console.log("Sub", subscribe);
+
