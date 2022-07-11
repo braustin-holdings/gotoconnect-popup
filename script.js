@@ -8,7 +8,8 @@ let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = []
 const nextURL = "/"
-let serverURL = 'https://braustin-server-staging.herokuapp.com'
+
+let serverURL = 'http://localhost:3001'
 
 const setEvents = (event) => {
   events.push(event);
@@ -35,8 +36,19 @@ const onMessage = async (event) => {
 
 async function callApis() {
   //The users toekn from to the smaller app
+  const location = window.location
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
+  if(window?.location !== undefined){
+    if(location.includes('staging')) {
+      
+     serverURL ='https://braustin-server-staging.herokuapp.com'
+     
+    } else if(location.includes('https://portal.findmymobilehome.com')){
+      
+      serverURL = 'https://braustin-server.herokuapp.com'
+    } 
+  }
   goToConnectAuthToken = urlParams.get("gotoconnecttoken");
   portalUserAuthToken = urlParams.get("portalusertoken");
   history.replaceState({id: 1}, '', nextURL)
