@@ -60,7 +60,7 @@ async function callApis() {
   socket.addEventListener("message", onMessage);
   ready = true;
 }
-console.log(`${process.env.DOMAIN_URL}`)
+
 const lookup = async (eventObj) => {
   const lookupResponse = await fetch(`${serverURL}/api/pipedrive`, {
     method: "POST",
