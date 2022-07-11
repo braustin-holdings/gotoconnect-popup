@@ -17,8 +17,8 @@ const setEvents = (event) => {
 
 
 
-const closeWebSocket = () => {
-  socket.close()
+const closeWebSocket = async () => {
+  await socket.close()
   window.close()
 }
 
