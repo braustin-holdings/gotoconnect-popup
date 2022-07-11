@@ -8,7 +8,7 @@ let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = []
 const nextURL = "/"
-
+let serverURL = 'https://braustin-server-staging.herokuapp.com'
 
 const setEvents = (event) => {
   events.push(event);
@@ -62,7 +62,7 @@ async function callApis() {
 }
 console.log(`${process.env.DOMAIN_URL}`)
 const lookup = async (eventObj) => {
-  const lookupResponse = await fetch("https://braustin-server-staging.herokuapp.com/api/pipedrive", {
+  const lookupResponse = await fetch(`${serverURL}/api/pipedrive`, {
     method: "POST",
     body: JSON.stringify(eventObj),
     headers: {
