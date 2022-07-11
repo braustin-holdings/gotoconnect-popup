@@ -60,9 +60,9 @@ async function callApis() {
   socket.addEventListener("message", onMessage);
   ready = true;
 }
-
+console.log(`${process.env.DOMAIN_URL}`)
 const lookup = async (eventObj) => {
-  const lookupResponse = await fetch(`${process.env.DOMAIN_URL}/api/pipedrive`, {
+  const lookupResponse = await fetch("https://braustin-server-staging.herokuapp.com/api/pipedrive", {
     method: "POST",
     body: JSON.stringify(eventObj),
     headers: {
