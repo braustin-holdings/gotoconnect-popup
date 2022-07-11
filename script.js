@@ -9,7 +9,7 @@ let portalUserAuthToken;
 let callEventArray = []
 const nextURL = "/"
 
-let serverURL = 'http://localhost:3001'
+let serverURL = 'https://braustin-server-staging.herokuapp.com'
 
 const setEvents = (event) => {
   events.push(event);
@@ -39,17 +39,17 @@ async function callApis() {
  
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  if(window?.location !== undefined){
-    console.log(typeof window.location.href)
-    if(window?.location.href.includes('staging')) {
+  // if(window?.location !== undefined){
+  //   console.log(typeof window.location.href)
+  //   if(window?.location.href.includes('staging')) {
       
-     serverURL ='https://braustin-server-staging.herokuapp.com'
+  //    serverURL ='https://braustin-server-staging.herokuapp.com'
      
-    } else if(window?.location.href.includes('https://portal.findmymobilehome.com')){
+  //   } else if(window?.location.href.includes('https://portal.findmymobilehome.com')){
       
-      serverURL = 'https://braustin-server.herokuapp.com'
-    } 
-  }
+  //     serverURL = 'https://braustin-server.herokuapp.com'
+  //   } 
+  // }
   goToConnectAuthToken = urlParams.get("gotoconnecttoken");
   portalUserAuthToken = urlParams.get("portalusertoken");
   history.replaceState({id: 1}, '', nextURL)
