@@ -8,7 +8,7 @@ let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = []
 const nextURL = "/"
-let serverURL = 'https://portal.findmymobilehome.com'
+let serverURL = 'https://braustin-server.herokuapp.com/'
 
 const setEvents = (event) => {
   events.push(event);
