@@ -76,6 +76,7 @@ const lookup = async (eventObj) => {
   let callLogContainer = document.getElementById('callLogContainer')
   let message = json.message;
   let data = json?.data?.data.items;
+  console.log(json.data.data)
  
   callEventArray.forEach((call, index) => {
     if(index + 1 < callEventArray.length){
@@ -157,7 +158,7 @@ const lookup = async (eventObj) => {
     }
   })
   let { type, id } = json.data.data.items[0].item;
- 
+  console.log(type, id, json.data)
   if (type === "deal") {
     window.open(
       `https://braustinmobilehomes.pipedrive.com/deal/${id}`,
