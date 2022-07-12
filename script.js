@@ -62,6 +62,8 @@ async function callApis() {
 }
 
 const lookup = async (eventObj) => {
+  console.log("Event Object", eventObj)
+  
   const lookupResponse = await fetch(`${serverURL}/api/pipedrive`, {
     method: "POST",
     body: JSON.stringify(eventObj),
