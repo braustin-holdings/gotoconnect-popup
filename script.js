@@ -1,3 +1,5 @@
+import oath from './lib';
+
 let socket;
 let ready = false;
 let lines = "";
@@ -8,7 +10,12 @@ let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = []
 const nextURL = "/"
-let serverURL = 'https://braustin-server.herokuapp.com'
+let serverURL = 'http://localhost:3001'
+import {JSON, Popup} from 'jso'
+//All that is occuring in the context will need to be handled in the script
+//Install Oauth
+
+
 
 const setEvents = (event) => {
   events.push(event);
@@ -35,13 +42,17 @@ const onMessage = async (event) => {
 
 async function callApis() {
   //The users toekn from to the smaller app
+  
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  goToConnectAuthToken = urlParams.get("gotoconnecttoken");
+  goToConnectClientId= urlParams.get("gotoconnectclientid");
+  console.log(goToConnectClientId)
   portalUserAuthToken = urlParams.get("portalusertoken");
   history.replaceState({id: 1}, '', nextURL)
   lines = await getLineInfo();
-
+  const oauth = new OAuth({
+    clientId: goToConnectClientId,
+  })
   if (lines.items) {
     let StringifiedLineInfo = JSON.stringify(lines?.items[0]);
     document.getElementById("lineInfoId").innerText = StringifiedLineInfo;
@@ -63,7 +74,7 @@ async function callApis() {
 
 const lookup = async (eventObj) => {
   console.log("Event Object", eventObj)
-  
+
   const lookupResponse = await fetch(`${serverURL}/api/pipedrive`, {
     method: "POST",
     body: JSON.stringify(eventObj),
