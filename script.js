@@ -143,15 +143,15 @@ const lookup = async (eventObj) => {
           messageTitle.classList.add('title')
           callLogBox.appendChild(messageTitle)
 
-          foundInformationMessage.innerText = message
-          foundInformationMessage.classList.add('callInformation')
-          callLogBox.appendChild(foundInformationMessage)
-          data.forEach((person) => {
-            let personInfo = JSON.stringify(person.item)
-            let personDiv = document.createElement('div')
-            personDiv.innerText = personInfo
-            callLogBox.appendChild(personDiv)
-          })
+          // foundInformationMessage.innerText = message
+          // foundInformationMessage.classList.add('callInformation')
+          // callLogBox.appendChild(foundInformationMessage)
+          // data.forEach((person) => {
+          //   let personInfo = JSON.stringify(person.item)
+          //   let personDiv = document.createElement('div')
+          //   personDiv.innerText = personInfo
+          //   callLogBox.appendChild(personDiv)
+          // })
           
         }
     }
