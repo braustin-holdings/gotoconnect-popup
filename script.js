@@ -7,7 +7,7 @@ let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = [];
 const nextURL = "/";
-let serverURL = "http://localhost:3001";
+let serverURL = "https://braustin-server-staging.herokuapp.com";
 let oauth;
 
 //All that is occuring in the context will need to be handled in the script
