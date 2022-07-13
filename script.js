@@ -57,7 +57,7 @@ async function callApis() {
     history.replaceState({ id: 1 }, "", nextURL);
     goToConnectAuthToken = token;
     lines = await getLineInfo();
-    console.log(token)
+    
     if (lines.items) {
       let StringifiedLineInfo = JSON.stringify(lines?.items[0]);
       document.getElementById("lineInfoId").innerText = StringifiedLineInfo;
@@ -73,7 +73,7 @@ async function callApis() {
     let stringifiedSubscription = JSON.stringify(subscription);
 
     document.getElementById("subscribeInfo").innerText =
-      stringifiedSubscription;
+    stringifiedSubscription;
     socket = new WebSocket(session.ws);
     socket.addEventListener("message", onMessage);
   
