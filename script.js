@@ -1,30 +1,30 @@
 let socket;
-let ready = false;
 let lines = "";
 let session = "";
 let subscription = "";
 let events = [];
 let goToConnectAuthToken;
 let portalUserAuthToken;
-let callEventArray = []
-const nextURL = "/"
-let serverURL = 'https://braustin-server.herokuapp.com'
+let callEventArray = [];
+const nextURL = "/";
+let serverURL = "http://localhost:3001";
+let oauth;
+
+//All that is occuring in the context will need to be handled in the script
+//Install Oauth
 
 const setEvents = (event) => {
   events.push(event);
-  ready = true;
 };
 
-
-
 const closeWebSocket = async () => {
-  await socket.close()
-  window.close()
-}
+  await socket.close();
+  window.close();
+};
 
 const onMessage = async (event) => {
   const data = JSON.parse(event.data);
-  
+
   //Waiting for an announce type to avoid duplicate lookup function calls.
   if (data.type === "announce") {
     setEvents(data);
@@ -35,40 +35,104 @@ const onMessage = async (event) => {
 
 async function callApis() {
   //The users toekn from to the smaller app
+
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  goToConnectAuthToken = urlParams.get("gotoconnecttoken");
+  goToConnectClientId = urlParams.get("gotoconnectclientid");
+  
   portalUserAuthToken = urlParams.get("portalusertoken");
-  history.replaceState({id: 1}, '', nextURL)
-  lines = await getLineInfo();
-
-  if (lines.items) {
-    let StringifiedLineInfo = JSON.stringify(lines?.items[0]);
-    document.getElementById("lineInfoId").innerText = StringifiedLineInfo;
+  if (goToConnectClientId) {
+    localStorage.setItem("gotoconnectclientid", goToConnectClientId);
+  }
+  if (portalUserAuthToken) {
+    localStorage.setItem("portalusertoken", portalUserAuthToken);
   }
 
-  session = await createSession();
+  
+  oauth = new OAuth({
+    clientId: localStorage.getItem("gotoconnectclientid"),
+  });
 
-  let stringifiedSessionInfo = JSON.stringify(session);
+  oauth.getToken().then(async (token) => {
+    history.replaceState({ id: 1 }, "", nextURL);
+    goToConnectAuthToken = token;
+    lines = await getLineInfo();
+    
+    if (lines.items) {
+      let StringifiedLineInfo = JSON.stringify(lines?.items[0]);
+      document.getElementById("lineInfoId").innerText = StringifiedLineInfo;
+    }
 
-  document.getElementById("sessionInfo").innerText = stringifiedSessionInfo;
-  subscription = await subscribe();
-  let stringifiedSubscription = JSON.stringify(subscription);
+   
+    session = await createSession();
 
-  document.getElementById("subscribeInfo").innerText = stringifiedSubscription;
-  socket = new WebSocket(session.ws);
-  socket.addEventListener("message", onMessage);
-  ready = true;
+    let stringifiedSessionInfo = JSON.stringify(session);
+
+    document.getElementById("sessionInfo").innerText = stringifiedSessionInfo;
+    subscription = await subscribe();
+    let stringifiedSubscription = JSON.stringify(subscription);
+
+    document.getElementById("subscribeInfo").innerText =
+    stringifiedSubscription;
+    socket = new WebSocket(session.ws);
+    socket.addEventListener("message", onMessage);
+  
+  });
+}
+
+async function getLineInfo() {
+  const response = await fetch("https://api.jive.com/users/v1/lines", {
+    headers: { Authorization: `Bearer ${goToConnectAuthToken}` },
+  });
+  return response.json();
+}
+
+async function createSession() {
+  const response = await fetch("https://realtime.jive.com/v2/session", {
+    headers: { Authorization: `Bearer ${goToConnectAuthToken}` },
+    method: "POST",
+  });
+  return response.json();
+}
+
+async function subscribe() {
+  if (lines.items) {
+    const firstLine = lines?.items[0];
+    // For this tutorial we will use the first line returned from potentially a larger list of lines.
+    const account = firstLine.organization.id;
+
+    const data = JSON.stringify([
+      {
+        id: "mylinesubscription",
+        type: "dialog",
+        entity: {
+          account: account,
+          type: "line.v2",
+          id: firstLine.id,
+        },
+      },
+    ]);
+
+    const response = await fetch(session.subscriptions, {
+      headers: {
+        Authorization: `Bearer ${goToConnectAuthToken}`,
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: data,
+    });
+    return response.json();
+  }
 }
 
 const lookup = async (eventObj) => {
-  console.log("Event Object", eventObj)
-  
+  let foundItem = localStorage.getItem('portalusertoken')
+  console.log(typeof foundItem)
   const lookupResponse = await fetch(`${serverURL}/api/pipedrive`, {
     method: "POST",
     body: JSON.stringify(eventObj),
     headers: {
-      Authorization: `Bearer ${portalUserAuthToken}`,
+      Authorization: `Bearer ${foundItem}`,
       "Content-Type": "application/json",
     },
   });
@@ -78,7 +142,6 @@ const lookup = async (eventObj) => {
   let callLogContainer = document.getElementById('callLogContainer')
   let message = json.message;
   let data = json?.data?.data.items;
-  console.log(json.data.data)
  
   callEventArray.forEach((call, index) => {
     if(index + 1 < callEventArray.length){
@@ -149,7 +212,7 @@ const lookup = async (eventObj) => {
           foundInformationMessage.innerText = message
           foundInformationMessage.classList.add('callInformation')
           callLogBox.appendChild(foundInformationMessage)
-          data?.forEach((person) => {
+          data.forEach((person) => {
             let personInfo = JSON.stringify(person.item)
             let personDiv = document.createElement('div')
             personDiv.innerText = personInfo
@@ -160,7 +223,7 @@ const lookup = async (eventObj) => {
     }
   })
   let { type, id } = json.data.data.items[0].item;
-  console.log(type, id, json.data)
+ 
   if (type === "deal") {
     window.open(
       `https://braustinmobilehomes.pipedrive.com/deal/${id}`,
@@ -180,50 +243,4 @@ const lookup = async (eventObj) => {
   }
 };
 
-async function getLineInfo() {
-  const response = await fetch("https://api.jive.com/users/v1/lines", {
-    headers: { Authorization: `Bearer ${goToConnectAuthToken}` },
-  });
-  return response.json();
-}
-
-async function createSession() {
-  const response = await fetch("https://realtime.jive.com/v2/session", {
-    headers: { Authorization: `Bearer ${goToConnectAuthToken}` },
-    method: "POST",
-  });
-  return response.json();
-}
-
-async function subscribe() {
-  if (lines.items) {
-    const firstLine = lines?.items[0];
-    // For this tutorial we will use the first line returned from potentially a larger list of lines.
-    const account = firstLine.organization.id;
-
-    const data = JSON.stringify([
-      {
-        id: "mylinesubscription",
-        type: "dialog",
-        entity: {
-          account: account,
-          type: "line.v2",
-          id: firstLine.id,
-        },
-      },
-    ]);
-
-    const response = await fetch(session.subscriptions, {
-      headers: {
-        Authorization: `Bearer ${goToConnectAuthToken}`,
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: data,
-    });
-    return response.json();
-  }
-}
-
 callApis();
-
