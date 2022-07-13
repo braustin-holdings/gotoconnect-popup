@@ -36,7 +36,7 @@ class LocationUtil {
     }
   }
   
- export class OAuth {
+  class OAuth {
     constructor({
       clientId,
       redirectUri = window.location.origin,
