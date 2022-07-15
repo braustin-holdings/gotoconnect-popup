@@ -141,6 +141,7 @@ const lookup = async (eventObj) => {
   callEventArray.push(json)
   let callLogContainer = document.getElementById('callLogContainer')
   let message = json.message;
+  console.log('Hello', json.data) 
   let data = json?.data?.data.items;
  
   callEventArray.forEach((call, index) => {
