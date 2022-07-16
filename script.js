@@ -138,11 +138,13 @@ const lookup = async (eventObj) => {
   });
   let response = lookupResponse;
   const json = await response.json();
+  console.log('Jason', json)
   callEventArray.push(json)
+  console.log('Call Event Array', callEventArray)
   let callLogContainer = document.getElementById('callLogContainer')
   let message = json.message;
-  console.log('Hello', json.data) 
-  let data = json?.data?.data.items;
+ 
+  let data = json?.data
  
   callEventArray.forEach((call, index) => {
     if(index + 1 < callEventArray.length){
@@ -186,7 +188,7 @@ const lookup = async (eventObj) => {
       callLogBox.appendChild(callDirectionDiv)
       
         let foundInformationMessage = document.createElement("div");
-      
+        console.log('What is the length of this data', data?.length)
         if (data?.length <= 1) {
           let messageTitle = document.createElement('div')
           messageTitle.innerText = 'Result Message:'
@@ -197,7 +199,7 @@ const lookup = async (eventObj) => {
           foundInformationMessage.classList.add('callInformation')
           callLogBox.appendChild(foundInformationMessage)
           // foundInformationMessage.appendChild(callDirectionDiv)
-      
+          console.log('This Is On a Call', call)
           let dataDiv =  document.createElement("div")
           let foundDealsOrLeads = JSON.stringify(call.data.data) 
           dataDiv.innerText = foundDealsOrLeads;
@@ -213,26 +215,30 @@ const lookup = async (eventObj) => {
           foundInformationMessage.innerText = message
           foundInformationMessage.classList.add('callInformation')
           callLogBox.appendChild(foundInformationMessage)
-          data.forEach((person) => {
-            let personInfo = JSON.stringify(person.item)
-            let personDiv = document.createElement('div')
-            personDiv.innerText = personInfo
-            callLogBox.appendChild(personDiv)
-          })
+        
+          // data?.forEach((person) => {
+          //   let personInfo = JSON.stringify(person)
+          //   let personDiv = document.createElement('div')
+          //   personDiv.style.marginTop = '10px'
+          //   console.log('personInfo', personInfo)
+          //   personDiv.innerText = personInfo
+          //   callLogBox.appendChild(personDiv)
+          // })
           
         }
     }
   })
-  let { type, id } = json.data.data.items[0].item;
- 
+  
+  let { type } = json
+
   if (type === "deal") {
     window.open(
-      `https://braustinmobilehomes.pipedrive.com/deal/${id}`,
+      `https://braustinmobilehomes.pipedrive.com/deal/${json.data[0].id}`,
       "_blank"
     );
   } else if (type === "lead") {
     window.open(
-      `https://braustinmobilehomes.pipedrive.com/leads/inbox/${id}`,
+      `https://braustinmobilehomes.pipedrive.com/leads/inbox/${json.data.id}`,
       "_blank"
     );
     
