@@ -156,6 +156,7 @@ const lookup = async (eventObj) => {
       callLogBox.style.margin = '20px 30px 30px 30px'
       callLogBox.style.borderRadius = '10px'
       callLogBox.style.padding = '5px'
+      callLogBox.style.fontSize = '18px'
       callLogContainer.appendChild(callLogBox)
 
       let flexBox1 = document.createElement('div')
@@ -204,8 +205,13 @@ const lookup = async (eventObj) => {
       response.eventLogicProcess.map((event) => {
         console.log('Events are everywhere', event)
         let processInformation = document.createElement('div')
+        console.log(event.includes('found'))
         processInformation.innerText = event
-        processInformation.style.color = 'grey'
+        if(event.includes('found')) {
+          processInformation.style.color = 'green'
+        } else {
+          processInformation.style.color = 'red'
+        }
         callLogBox.appendChild(processInformation)
       })
 
@@ -220,97 +226,49 @@ const lookup = async (eventObj) => {
       // foundInformationMessage.classList.add('callInformation')
       // callLogBox.appendChild(foundInformationMessage)
         
-      console.log('Checking call Event Array', response)
         if(response.type === 'lead'){
           let foundDocument = document.createElement('div')
           foundDocument.style.marginTop = '5px'
+          foundDocument.style.fontSize = '18px'
           foundDocument.innerText = 'Found Document'
-          foundDocument.style.fontSize = '20px'
+          foundDocument.style.fontWeight = 'bold'
           callLogBox.appendChild(foundDocument)
-          
-          let flexBox5 = document.createElement('div')
-          flexBox5.style.display = 'flex'
-          flexBox5.style.alignItems = 'center'
-          flexBox5.style.alignItems = 'center'
-          foundDocument.appendChild(flexBox5)
 
           let leadNameTitle = document.createElement('div')
-          leadNameTitle.innerText = 'Title:'
-          leadNameTitle.style.fontWeight = 'bold'
-          flexBox5.appendChild(leadNameTitle)
+          leadNameTitle.innerText = `Title: ${response?.data?.title}`
+          callLogBox.appendChild(leadNameTitle)
           
-
-          let leadName = document.createElement('div')
-          leadName.innerText = `${response?.data?.title}`
-          flexBox5.appendChild(leadName)
-
-
-          let flexBox6 = document.createElement('div')
-          flexBox6.style.display = 'flex'
-          foundDocument.appendChild(flexBox6)
-
           let leadIdTitle = document.createElement('div')
-          leadIdTitle.style.fontWeight = 'bold'
-          leadIdTitle.innerText = 'ID:'
-          flexBox6.appendChild(leadIdTitle)
-          let leadId = document.createElement('div')
-          leadId.innerText = `${response.data.id}`
-          flexBox6.appendChild(leadId)
-
-          let flexBox7 = document.createElement('div')
-          flexBox7.style.display = 'flex'
-          foundDocument.appendChild(flexBox7)
+          leadIdTitle.innerText = `ID: ${response.data.id}`
+          callLogBox.appendChild(leadIdTitle)
 
           let isArchivedTitle = document.createElement('div')
-          isArchivedTitle.innerText = 'Archived?: '
-          isArchivedTitle.style.fontWeight = 'bold'
-          flexBox7.appendChild(isArchivedTitle)
-
-
-          let isArchived = document.createElement('div')
-          isArchived.innerText = `${response.data.is_archived}`
-          flexBox7.appendChild(isArchived)
+          isArchivedTitle.innerText = `Is Archived?: ${response.data.is_archived}`
+          callLogBox.appendChild(isArchivedTitle)
           
-          let flexBox8 = document.createElement('div')
-          flexBox8.style.display = 'flex'
-          flexBox8.style.alignItems = 'center'
-          foundDocument.appendChild(flexBox8)
+          let personTab = document.createElement('div')
+          personTab.innerText = 'Person'
+          personTab.style.fontWeight = 'bold'
+          callLogBox.appendChild(personTab)
 
           let personNameTitle = document.createElement('div')
-          personNameTitle.style.fontWeight = 'bold'
-          personNameTitle.innerText = 'Persons Name:'
-          flexBox8.appendChild(personNameTitle)
-
-          let personName = document.createElement('div')
-          personName.innerText = `${response.data.person.name}`
-          flexBox8.appendChild(personName)
-
-
-          let flexBox9 = document.createElement('div')
-          flexBox9.style.display = 'flex'
-          foundDocument.appendChild(flexBox9)
-
-          let personIdTitle = document.createElement('div')
-          personIdTitle.innerText = 'Person ID:'
-          personIdTitle.style.fontWeight = 'bold'
-          flexBox9.appendChild(personIdTitle)
-
-          let personId = document.createElement('div')
-          personId.innerText = `${response.data.id}`
-          flexBox9.appendChild(personId)
+          personNameTitle.innerText = `Name: ${response.data.person.name}`
+          callLogBox.appendChild(personNameTitle)
           
-          let flexBox10 = document.createElement('div')
-          flexBox10.style.display = 'flex'
-          foundDocument.appendChild(flexBox10)
+          let personIdTitle = document.createElement('div')
+          personIdTitle.innerText = `ID: ${response.data.id}`
+          callLogBox.appendChild(personIdTitle)
+          
+          let ownerTab = document.createElement('div')
+          ownerTab.innerText = 'Owner'
+          ownerTab.style.fontWeight = 'bold'
+          callLogBox.appendChild(ownerTab)
 
           let ownerIdTitle = document.createElement('div')
-          ownerIdTitle.innerText = 'Owner ID:'
-          ownerIdTitle.style.fontWeight = 'bold'
-          flexBox10.appendChild(ownerIdTitle)
+          ownerIdTitle.innerText = `ID: ${response.data.owner.id}`
+          callLogBox.appendChild(ownerIdTitle)
 
-          let ownerId = document.createElement('div')
-          ownerId.innerText = `${response.data.owner.id}`
-          flexBox10.appendChild(ownerId)
+          
         }
         if(response?.data.length >= 1) {
           response?.data.forEach((response) => {
