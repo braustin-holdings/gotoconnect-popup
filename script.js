@@ -7,7 +7,7 @@ let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = [];
 const nextURL = "/";
-let serverURL = "https://braustin-server-staging.herokuapp.com";
+let serverURL = "http://localhost:3001";
 let oauth;
 
 //All that is occuring in the context will need to be handled in the script
@@ -371,7 +371,7 @@ const lookup = async (eventObj) => {
   })
   
   let { type } = response
-  
+  console.log(type, response.data)
   if (type === "deal") {
     window.open(
       `https://braustinmobilehomes.pipedrive.com/deal/${response.data[0].id}`,
@@ -384,7 +384,7 @@ const lookup = async (eventObj) => {
     );
     
   } else if (type === 'person'){
-     window.open(`https://braustinmobilehomes.pipedrive.com/person/${id}`) 
+     window.open(`https://braustinmobilehomes.pipedrive.com/person/${response.data.id}`) 
   }
   else {
     console.log("We couldnt determine the type. Sorry...");
