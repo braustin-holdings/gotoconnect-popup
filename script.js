@@ -7,7 +7,7 @@ let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = [];
 const nextURL = "/";
-let serverURL = "http://localhost:3001";
+let serverURL = "https://inbound.findmymobilehome.com/";
 let oauth;
 
 //All that is occuring in the context will need to be handled in the script
@@ -138,6 +138,7 @@ const lookup = async (eventObj) => {
   });
   let initialResponse = lookupResponse;
   const response = await initialResponse.json();
+  console.log(response)
   let callLogContainer = document.getElementById('callLogContainer')
   let message = response.message;
   callEventArray.push(response)
@@ -202,17 +203,18 @@ const lookup = async (eventObj) => {
       flexBox3.appendChild(callDirectionDiv)
       callDirectionDiv.innerText = response.direction
       
+      let eventLogicProcessContainer = document.createElement('div')
+      callLogBox.appendChild(eventLogicProcessContainer)
+      eventLogicProcessContainer.style.margin = '10px 0 10px 0'
       response.eventLogicProcess.map((event) => {
-        console.log('Events are everywhere', event)
         let processInformation = document.createElement('div')
-        console.log(event.includes('found'))
         processInformation.innerText = event
         if(event.includes('found')) {
           processInformation.style.color = 'green'
         } else {
           processInformation.style.color = 'red'
         }
-        callLogBox.appendChild(processInformation)
+        eventLogicProcessContainer.appendChild(processInformation)
       })
 
       
@@ -228,7 +230,7 @@ const lookup = async (eventObj) => {
         
         if(response.type === 'lead'){
           let foundDocument = document.createElement('div')
-          foundDocument.style.marginTop = '5px'
+          foundDocument.style.marginTop = '15px'
           foundDocument.style.fontSize = '18px'
           foundDocument.innerText = 'Found Document'
           foundDocument.style.fontWeight = 'bold'
@@ -275,9 +277,9 @@ const lookup = async (eventObj) => {
             
                 // foundInformationMessage.appendChild(callDirectionDiv)
                 let dataDiv =  document.createElement("div")
-                dataDiv.style.marginTop = '10px'
                 dataDiv.style.width = 'fit-content'
                 dataDiv.style.wordWrap = 'anywhere'
+                dataDiv.style.marginTop = '15px'
                 let dealOrLeadData = JSON.stringify(response)
                 // dataDiv.innerText = dealOrLeadData
                 dataDiv.classList.add('callInformation')
