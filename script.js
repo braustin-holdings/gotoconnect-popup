@@ -7,8 +7,9 @@ let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = [];
 const nextURL = "/";
-let serverURL = "https://braustin-server-staging.herokuapp.com";
+let serverURL = "http://localhost:3001";
 let oauth;
+let eventData 
 
 //All that is occuring in the context will need to be handled in the script
 //Install Oauth
@@ -22,12 +23,12 @@ const closeWebSocket = async () => {
   window.close();
 };
 
+//Waiting for an announce type to avoid duplicate lookup function calls.
 const onMessage = async (event) => {
   const data = JSON.parse(event.data);
-
-  //Waiting for an announce type to avoid duplicate lookup function calls.
+  console.log('DATATATA', data.data)
+  eventData = data.data
   if (data.type === "announce") {
-    setEvents(data);
     lookup(data);
   } else {
   }
@@ -125,6 +126,21 @@ async function subscribe() {
   }
 }
 
+const createPDCusty = async (eventObj) => {
+  console.log('We made it', eventData)
+  let foundItem = localStorage.getItem('portalusertoken')
+  const createdCusty = await fetch(`${serverURL}/api/pipedrive/createCusty`, {
+    method: "POST",
+    body: JSON.stringify(eventData),
+    headers: {
+      Authorization: `Bearer ${foundItem}`,
+      "Content-Type": "application/json",
+    }
+  })
+}
+
+
+
 const lookup = async (eventObj) => {
   let foundItem = localStorage.getItem('portalusertoken')
   console.log(typeof foundItem)
@@ -135,10 +151,16 @@ const lookup = async (eventObj) => {
       Authorization: `Bearer ${foundItem}`,
       "Content-Type": "application/json",
     },
-  });
+  }
+ 
+  );
+
+  
+
   let initialResponse = lookupResponse;
   const response = await initialResponse.json();
-  console.log(response)
+  console.log("RESPONSE", response)
+  
   let callLogContainer = document.getElementById('callLogContainer')
   let message = response.message;
   callEventArray.push(response)
@@ -206,7 +228,7 @@ const lookup = async (eventObj) => {
       let eventLogicProcessContainer = document.createElement('div')
       callLogBox.appendChild(eventLogicProcessContainer)
       eventLogicProcessContainer.style.margin = '10px 0 10px 0'
-      response.eventLogicProcess.map((event) => {
+      response?.eventLogicProcess?.map((event) => {
         let processInformation = document.createElement('div')
         processInformation.innerText = event
         if(event.includes('found')) {
@@ -229,6 +251,22 @@ const lookup = async (eventObj) => {
       // callLogBox.appendChild(foundInformationMessage)
         
         if(response.type === 'lead'){
+          // if(response.create) {
+
+          // }
+          if(response.requestToCreateCusty) {
+            let yesButton = document.createElement('button')
+            yesButton.innerText = 'Yes'
+            callLogBox.appendChild(yesButton)
+            yesButton.style.backgroundColor = 'green'
+            yesButton.addEventListener("click", createPDCusty)
+
+            let noButton = document.createElement('button')
+            noButton.innerText = 'No'
+            callLogBox.appendChild(noButton)
+            noButton.style.backgroundColor = 'red'
+            return
+          }
           let foundDocument = document.createElement('div')
           foundDocument.style.marginTop = '15px'
           foundDocument.style.fontSize = '18px'
@@ -271,9 +309,42 @@ const lookup = async (eventObj) => {
           callLogBox.appendChild(ownerIdTitle)
 
           
+        } else if (response.type === 'person'){
+          let foundDocument = document.createElement('div')
+          foundDocument.innerText = 'Found Person'
+          foundDocument.style.fontWeight = 'bold'
+          callLogBox.appendChild(foundDocument)
+
+          let personName = document.createElement('div')
+          personName.innerText = `Name: ${response.data.name}`
+          callLogBox.appendChild(personName)
+
+          let personId = document.createElement('div')
+          personId.innerText = `ID: ${response.data.id}`
+          callLogBox.appendChild(personId)
+
+          let phoneNumberTitle = document.createElement('div')
+          phoneNumberTitle.innerText = 'Known Phone Numbers:'
+          callLogBox.appendChild(phoneNumberTitle)
+
+          response.data.phones.forEach((number) => {
+            let phoneNumber = document.createElement('div')
+            phoneNumber.innerText = number
+            callLogBox.appendChild(phoneNumber)
+          })
+
+          let emailTitle = document.createElement('div')
+          emailTitle.innerText = 'Emails:'
+          callLogBox.appendChild(emailTitle)
+
+          response.data.emails.forEach((email) => {
+            let emails = document.createElement('div')
+            emails.innerText = email
+            callLogBox.appendChild(emails)
+          })
         }
-        if(response?.data.length >= 1) {
-          response?.data.forEach((response) => {
+        if(response?.data?.length >= 1) {
+          response?.data?.forEach((response) => {
             
                 // foundInformationMessage.appendChild(callDirectionDiv)
                 let dataDiv =  document.createElement("div")
@@ -371,20 +442,20 @@ const lookup = async (eventObj) => {
   })
   
   let { type } = response
-  
+  console.log(type, response.data)
   if (type === "deal") {
     window.open(
       `https://braustinmobilehomes.pipedrive.com/deal/${response.data[0].id}`,
       "_blank"
     );
-  } else if (type === "lead") {
+  } else if (type === "lead" && !response.requestToCreateCusty) {
     window.open(
       `https://braustinmobilehomes.pipedrive.com/leads/inbox/${response.data.id}`,
       "_blank"
     );
     
   } else if (type === 'person'){
-     window.open(`https://braustinmobilehomes.pipedrive.com/person/${id}`) 
+     window.open(`https://braustinmobilehomes.pipedrive.com/person/${response.data.id}`) 
   }
   else {
     console.log("We couldnt determine the type. Sorry...");
