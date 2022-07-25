@@ -1,0 +1,253 @@
+[33mcommit 28f12db0d84ffc994538c05ea88f8c70bb814984[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Mon Jul 25 01:58:48 2022 -0400
+
+    revert
+
+[33mcommit cee5392655229fb4fcacf72317f6668ce9b0c6d9[m[33m ([m[1;32mcole-design[m[33m)[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Sun Jul 24 18:13:07 2022 -0400
+
+    saving before changing ui/ux in a branch
+
+[33mcommit 6c487ce8ca471d16bbc8f0811ccf7bdf8ed73a95[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Fri Jul 22 05:24:46 2022 -0400
+
+    gave the user the ability to choose if they want to create a lead and a person
+
+[33mcommit 605a81b713b74c108374b37634218ca204eda229[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Thu Jul 21 12:32:50 2022 -0400
+
+    updated server url to staging url
+
+[33mcommit 79b6a5550b6a88d349eb17129c744e7f80391448[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Thu Jul 21 10:53:24 2022 -0400
+
+    small adjustments with found document formatting
+
+[33mcommit fbccc99c9e8a9b702b4845e517d4990e0016f495[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Wed Jul 20 23:34:43 2022 -0400
+
+    fixed lead found ui and added colors to logicprocesslogs
+
+[33mcommit a793d53a37dbaa555e2edb9c151307c4af18238e[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Wed Jul 20 17:33:22 2022 -0400
+
+    more ui tweaks
+
+[33mcommit 44ebf1e5e6a3fc9a1b5722758295e806670f298c[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Sat Jul 16 15:31:06 2022 -0400
+
+    now a deal or lead will populate in pipedrive
+
+[33mcommit 128e7409c922e0dabaa454ac57b6ad39b4ea40e0[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Fri Jul 15 13:28:30 2022 -0400
+
+    push some console log
+
+[33mcommit 05dfefacbd57c7a1ad0c2afd23b40ac09adf1553[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Thu Jul 14 17:43:13 2022 -0400
+
+    changed serverURL
+
+[33mcommit 090f6ab6a9077db431f170f1f569ca1029b8dcd2[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Wed Jul 13 16:18:19 2022 -0400
+
+    test2
+
+[33mcommit 6f86ab5d7548ad93ac986fe785c602b1eb7d12e4[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Wed Jul 13 16:17:20 2022 -0400
+
+    removed un needed depencies
+
+[33mcommit 4076b77cfc4b15aa134af6573c87f84c34317efa[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Wed Jul 13 16:05:43 2022 -0400
+
+    deleted node modules
+
+[33mcommit 8164029346ab3543eefd905f2011c0a573fd495f[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Wed Jul 13 15:49:33 2022 -0400
+
+    push for staging
+
+[33mcommit 0a4ef98df1e9381633b36ab0adbf1f2be625fd96[m
+Merge: 61eb913 2f4dacb
+Author: AlexanderLeino <86174874+AlexanderLeino@users.noreply.github.com>
+Date:   Wed Jul 13 15:45:10 2022 -0400
+
+    Merge pull request #2 from braustin-holdings/transfer-goto-connectivity-to-standalone-app
+    
+    Transfer goto connectivity to standalone app
+
+[33mcommit 2f4dacbe6a8772eb620363f4cd7da6c6ab7040c2[m[33m ([m[1;31morigin/transfer-goto-connectivity-to-standalone-app[m[33m, [m[1;32mtransfer-goto-connectivity-to-standalone-app[m[33m)[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Wed Jul 13 15:35:37 2022 -0400
+
+    push for azure
+
+[33mcommit a11772a4fdac36d7b58105bc6cb130cced8e13f4[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Wed Jul 13 15:00:27 2022 -0400
+
+    connection happens once you click the button to listen to calls
+
+[33mcommit e6ce1ea0a4bc9a9ea80d7b7b762939c9e9955894[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Tue Jul 12 17:52:30 2022 -0400
+
+    standalone app
+
+[33mcommit 61eb91327e226476ff926d24dfee989ba86f8f7c[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Tue Jul 12 16:11:18 2022 -0400
+
+    added console logs
+
+[33mcommit 792253e618311e656317472461a59f2676697688[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Tue Jul 12 16:03:04 2022 -0400
+
+    added some console logs
+
+[33mcommit f060b9ab44bc322502f5429d57f125b4b86aadc1[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Tue Jul 12 15:49:30 2022 -0400
+
+    easy fix
+
+[33mcommit c53369436865d491592158ce1961019ade4d1994[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Tue Jul 12 15:44:32 2022 -0400
+
+    commit
+
+[33mcommit 55ca254127de44fcbc49a65b5cf8e45074156083[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Tue Jul 12 15:29:08 2022 -0400
+
+    changed server url
+
+[33mcommit c005bcfc7c4f0483e151fd937abf4270eb342d08[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Tue Jul 12 15:28:32 2022 -0400
+
+    changed server url
+
+[33mcommit 49882ef9f933fb49f67a5081095ce7cceeeb7c30[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Tue Jul 12 15:23:42 2022 -0400
+
+    test
+
+[33mcommit 30651b3b42c51f8da3686bea156d1ac968ccdb48[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Mon Jul 11 12:28:30 2022 -0400
+
+    revert
+
+[33mcommit acd55959eefa9f39c73738767ceca5ca684067f9[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Mon Jul 11 12:25:05 2022 -0400
+
+    reverted some changes
+
+[33mcommit 44065a00be7098dafa5fb269efac02021b5e964c[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Mon Jul 11 12:18:28 2022 -0400
+
+    updated to check for enviroment
+
+[33mcommit d39921a8b3480f6d852788afc67a8585c0929470[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Mon Jul 11 12:06:26 2022 -0400
+
+    updated server url to dynamically change based on the enviroment
+
+[33mcommit 11705777bedd0676fad39cf80acddff77fd5f535[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Mon Jul 11 11:30:15 2022 -0400
+
+    updates
+
+[33mcommit d81bf44e0177e95d2a632c69f1cc0546d9ebc2cf[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Mon Jul 11 11:25:02 2022 -0400
+
+    updated global variables with serverURL
+
+[33mcommit 38af7b4989e1cbe15465d19cb247ccebf45754a8[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Mon Jul 11 11:21:01 2022 -0400
+
+    setting up for staging
+
+[33mcommit e0d307c158a9f9b82753b3fb188efd1d5fd35460[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Mon Jul 11 11:13:19 2022 -0400
+
+    updated env variables currently pointed to staging url
+
+[33mcommit d0d015e705ea72224e53c1bc7b1a9c9023dca286[m
+Merge: d966b12 e20fdee
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Mon Jul 11 10:17:53 2022 -0400
+
+    Merge branch 'main' of https://github.com/braustin-holdings/gotoconnect-popup
+
+[33mcommit d966b122803772261729ef44fce7ed98ee33cc80[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Mon Jul 11 10:17:28 2022 -0400
+
+    small changes
+
+[33mcommit e20fdee45a2b569714a5fdc556042e3fda262e9b[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Mon Jul 11 10:16:41 2022 -0400
+
+    domain url added
+
+[33mcommit d06c8bf0ee27f4e5422cd09eed117490e94e64c0[m
+Author: Jon Roberts <bigjonroberts@users.noreply.github.com>
+Date:   Tue Jul 5 16:12:33 2022 -0500
+
+    ci: add Azure Static Web Apps workflow file
+    on-behalf-of: @Azure opensource@microsoft.com
+
+[33mcommit 6b2fef72c960d78915b897648f45fef3cd97c99c[m
+Author: Jon Roberts <bigjonroberts@users.noreply.github.com>
+Date:   Tue Jul 5 15:52:58 2022 -0500
+
+    Create README.md
+
+[33mcommit 5923cab36592cf966ab9a4d19a8a7a677f15240a[m
+Author: Jon Roberts <bigjonroberts@users.noreply.github.com>
+Date:   Tue Jul 5 15:46:41 2022 -0500
+
+    ci: add Azure Static Web Apps workflow file
+    on-behalf-of: @Azure opensource@microsoft.com
+
+[33mcommit 90720ff4842b5a14ae5ed4543e72cfab3b177ab2[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Tue Jul 5 15:45:09 2022 -0400
+
+    test
+
+[33mcommit d59ea7f202c7abbb8355e0b9f7dbea9f4d51364f[m
+Author: Alexander Leino <Alexander.Leino@yahoo.com>
+Date:   Fri Jul 1 16:47:06 2022 -0400
+
+    able to close websocket on butotn close and able ot close window. Also updated more information to display if their a multiple results for both leads and deals
+
+[33mcommit 07591fd24008bfeb9f67bfc89d07a3f9859873eb

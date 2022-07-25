@@ -58,23 +58,13 @@ async function callApis() {
     history.replaceState({ id: 1 }, "", nextURL);
     goToConnectAuthToken = token;
     lines = await getLineInfo();
-    
-    if (lines.items) {
-      let StringifiedLineInfo = JSON.stringify(lines?.items[0]);
-      document.getElementById("lineInfoId").innerText = StringifiedLineInfo;
-    }
-
    
     session = await createSession();
 
-    let stringifiedSessionInfo = JSON.stringify(session);
-
-    document.getElementById("sessionInfo").innerText = stringifiedSessionInfo;
     subscription = await subscribe();
     let stringifiedSubscription = JSON.stringify(subscription);
 
-    document.getElementById("subscribeInfo").innerText =
-    stringifiedSubscription;
+   
     socket = new WebSocket(session.ws);
     socket.addEventListener("message", onMessage);
   
@@ -99,6 +89,20 @@ async function createSession() {
 async function subscribe() {
   if (lines.items) {
     const firstLine = lines?.items[0];
+
+    let calleeTitle = document.getElementById('salesRepTitle')
+      calleeTitle.innerText = 'Sales Rep Information:'
+      calleeTitle.classList.add('title')
+      
+     
+      let calleeName = document.getElementById('salesRepName')
+      calleeName.innerText = `Name: ${lines.items[0].name}` 
+     
+     
+      let calleeNumber = document.getElementById('salesRepExtension')
+      calleeNumber.innerText = `Number: ${lines.items[0].number}`
+   
+  
     // For this tutorial we will use the first line returned from potentially a larger list of lines.
     const account = firstLine.organization.id;
 
@@ -182,35 +186,24 @@ const lookup = async (eventObj) => {
       callLogBox.style.fontSize = '18px'
       callLogContainer.appendChild(callLogBox)
 
-      let flexBox1 = document.createElement('div')
-      flexBox1.style.display = 'flex'
-      flexBox1.style.alignItems = 'center'
-      callLogBox.appendChild(flexBox1)
       let callerTitle = document.createElement('div')
       callerTitle.innerText = 'Caller Information:'
       callerTitle.classList.add('title')
-      flexBox1.appendChild(callerTitle)
-      let callerDiv = document.createElement('div')
-      let callerData = JSON.stringify(response.caller)
-      callerDiv.innerText = callerData
-      callerDiv.classList.add('callInformation')
-      flexBox1.appendChild(callerDiv)
-      
-      let flexBox2 = document.createElement('div')
-      flexBox2.style.display = 'flex'
-      flexBox2.style.alignItems = 'center'
-      callLogBox.appendChild(flexBox2)
+      callLogBox.appendChild(callerTitle)
 
-      let calleeTitle = document.createElement('div')
-      calleeTitle.innerText = 'Callee Information:'
-      calleeTitle.classList.add('title')
-      flexBox2.appendChild(calleeTitle)
-      let calleeDiv = document.createElement('div')
-      let calleeData = JSON.stringify(response.callee)
-      calleeDiv.innerText = calleeData
-      calleeDiv.classList.add('callInformation')
-      flexBox2.appendChild(calleeDiv)
+      // let callerDiv = document.createElement('div')
+      // let callerData = JSON.stringify(response.caller)
+
+      let callerName = document.createElement('div')
+      callerName.innerText = ` Name: ${response.caller.name}`
+      callLogBox.appendChild(callerName)
+
+      let callerNumber = document.createElement('div')
+      callerNumber.innerText = `Number ${response.caller.number}`
+      callLogBox.appendChild(callerNumber)
   
+
+      
       let flexBox3 = document.createElement('div')
       flexBox3.style.display = 'flex'
       flexBox3.style.alignItems = 'center'
