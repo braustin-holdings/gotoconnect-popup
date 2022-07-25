@@ -11,6 +11,9 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+    env:
+      server_uri: "https://inbound.staging.findmymobilehome.com"
+      goto_connect_client_id: $${{ secrets.GOTO_CONNECT_CLIENT_ID_STAGING }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -19,9 +22,6 @@ jobs:
         id: envreplace
         run: build/env.sh
         shell: bash
-        with:
-          server_uri: "https://inbound.staging.findmymobilehome.com"
-          goto_connect_client_id: $${{ secrets.GOTO_CONNECT_CLIENT_ID_STAGING }}
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
