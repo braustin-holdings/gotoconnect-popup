@@ -15,11 +15,7 @@ html {
 }
 
 .title {
-<<<<<<< HEAD
     font-size: 18px;
-=======
-    font-size: 20px;
->>>>>>> f5f6808c02ca172d46d5ce65de5496091c93092d
     font-weight: bold;
 }
 .closeButton {
@@ -77,7 +73,6 @@ html {
 #callDirectionTitle {
     font-weight: bold;
     font-size: 20px;
-<<<<<<< HEAD
 }
 
 #salesRepName { 
@@ -87,6 +82,3 @@ html {
 #salesRepExtension { 
     font-size: 18px;
 }
-=======
-}
->>>>>>> f5f6808c02ca172d46d5ce65de5496091c93092d
