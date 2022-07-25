@@ -32,7 +32,7 @@ html {
     justify-content: flex-end;
     margin-right: 30px;
 }
-.box {
+#box {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background-color: white;
     margin: 10px 30px 30px 30px;
@@ -73,4 +73,12 @@ html {
 #callDirectionTitle {
     font-weight: bold;
     font-size: 20px;
+}
+
+#salesRepName { 
+    font-size: 18px;
+}
+
+#salesRepExtension { 
+    font-size: 18px;
 }

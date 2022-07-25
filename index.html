@@ -5,8 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src='lib.js'></script>
-    <script src='script.js'></script>
+   
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,12 +13,16 @@
     <div class='buttonContainer'>
         <button class='closeButton' onClick='closeWebSocket()'>Stop Listening</button>
     </div>
-    <div class='box'>
+    <div id='box'>
         <div id='salesRepTitle'></div>
         <div id='salesRepName'></div>
         <div id='salesRepExtension'></div>  
     </div>
     <div id='callLogContainer'></div>
-    <div id='callLogBox'></div>
+    
+    
+    
 </body>
+<script src='lib.js'></script>
+<script src='script.js'></script>
 </html>

@@ -7,9 +7,13 @@ let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = [];
 const nextURL = "/";
-let serverURL = "http://localhost:3001";
+let serverURL = "https://braustin-server.herokuapp.com/";
 let oauth;
 let eventData 
+let createLeadButton = document.createElement('button')
+let callLogBox = document.createElement('div')
+let callEventReversed
+
 
 //All that is occuring in the context will need to be handled in the script
 //Install Oauth
@@ -131,6 +135,7 @@ async function subscribe() {
 }
 
 const createPDCusty = async (eventObj) => {
+  createLeadButton.disabled = true
   console.log('We made it', eventData)
   let foundItem = localStorage.getItem('portalusertoken')
   const createdCusty = await fetch(`${serverURL}/api/pipedrive/createCusty`, {
@@ -163,28 +168,37 @@ const lookup = async (eventObj) => {
 
   let initialResponse = lookupResponse;
   const response = await initialResponse.json();
-  console.log("RESPONSE", response)
+
   
   let callLogContainer = document.getElementById('callLogContainer')
+  callLogContainer.innerHTML = ''
   let message = response.message;
-  callEventArray.push(response)
- 
+  callEventArray.unshift(response)
 
+  
+  console.log('Reversed array', callEventArray)
   //Decision Log
+  callLogBox.remove()
 
-
-  let foundDealOrLeads = response?.data
   callEventArray.forEach((response, index) => {
-    if(index + 1 < callEventArray.length){
-      return
-    } else {
-      let callLogBox = document.createElement('div')
+      console.log(response, index)
+      callLogBox = document.createElement('div')
       callLogBox.style.backgroundColor = 'white'
       callLogBox.style.margin = '20px 30px 30px 30px'
       callLogBox.style.borderRadius = '10px'
       callLogBox.style.padding = '5px'
       callLogBox.style.fontSize = '18px'
       callLogContainer.appendChild(callLogBox)
+
+      let timeStamp = document.createElement('div')
+      let time = response.time
+
+      timeStamp.innerText = time
+      timeStamp.style.fontSize = '20px'
+      timeStamp.style.fontWeight = 'bold'
+      timeStamp.style.color = '#1b406a'
+      callLogBox.appendChild(timeStamp)
+
 
       let callerTitle = document.createElement('div')
       callerTitle.innerText = 'Caller Information:'
@@ -199,7 +213,7 @@ const lookup = async (eventObj) => {
       callLogBox.appendChild(callerName)
 
       let callerNumber = document.createElement('div')
-      callerNumber.innerText = `Number ${response.caller.number}`
+      callerNumber.innerText = `Number: ${response.caller.number}`
       callLogBox.appendChild(callerNumber)
   
 
@@ -209,15 +223,19 @@ const lookup = async (eventObj) => {
       flexBox3.style.alignItems = 'center'
       callLogBox.appendChild(flexBox3)
 
-      let directionTitle = document.createElement('div')
-      directionTitle.innerText = 'Call Direction:'
-      directionTitle.classList.add('title')
-      flexBox3.appendChild(directionTitle)
-      let callDirectionDiv = document.createElement('div')
-      callDirectionDiv.classList.add('callInformation')
-      flexBox3.appendChild(callDirectionDiv)
-      callDirectionDiv.innerText = response.direction
+      // let directionTitle = document.createElement('div')
+      // directionTitle.innerText = 'Call Direction:'
+      // directionTitle.classList.add('title')
+      // flexBox3.appendChild(directionTitle)
+      // let callDirectionDiv = document.createElement('div')
+      // callDirectionDiv.classList.add('callInformation')
+      // flexBox3.appendChild(callDirectionDiv)
+      // callDirectionDiv.innerText = response.direction
       
+     
+
+      
+
       let eventLogicProcessContainer = document.createElement('div')
       callLogBox.appendChild(eventLogicProcessContainer)
       eventLogicProcessContainer.style.margin = '10px 0 10px 0'
@@ -248,16 +266,16 @@ const lookup = async (eventObj) => {
 
           // }
           if(response.requestToCreateCusty) {
-            let yesButton = document.createElement('button')
-            yesButton.innerText = 'Yes'
-            callLogBox.appendChild(yesButton)
-            yesButton.style.backgroundColor = 'green'
-            yesButton.addEventListener("click", createPDCusty)
-
-            let noButton = document.createElement('button')
-            noButton.innerText = 'No'
-            callLogBox.appendChild(noButton)
-            noButton.style.backgroundColor = 'red'
+           
+            createLeadButton.innerText = 'Create A Lead +'
+            callLogBox.appendChild(createLeadButton)
+            createLeadButton.style.backgroundColor = 'lightGreen'
+            createLeadButton.style.borderRadius = '25px'
+            createLeadButton.style.padding = '5px'
+            createLeadButton.style.fontWeight = 'bold'
+            createLeadButton.addEventListener("click", createPDCusty)
+            
+            
             return
           }
           let foundDocument = document.createElement('div')
@@ -301,6 +319,20 @@ const lookup = async (eventObj) => {
           ownerIdTitle.innerText = `ID: ${response.data.owner.id}`
           callLogBox.appendChild(ownerIdTitle)
 
+       
+          let goToLeadButton = document.createElement('button')
+          goToLeadButton.innerText = 'Open Lead In Pipedrive'
+          callLogBox.appendChild(goToLeadButton)
+          goToLeadButton.onclick = () => window.open(
+            `https://braustinmobilehomes.pipedrive.com/leads/inbox/${response.data.id}`,
+            "_blank"
+          );
+
+            goToLeadButton.style.backgroundColor = 'lightGreen'
+            goToLeadButton.style.borderRadius = '25px'
+            goToLeadButton.style.padding = '5px'
+            goToLeadButton.style.fontWeight = 'bold'
+            goToLeadButton.style.marginTop = '10px'
           
         } else if (response.type === 'person'){
           let foundDocument = document.createElement('div')
@@ -335,8 +367,20 @@ const lookup = async (eventObj) => {
             emails.innerText = email
             callLogBox.appendChild(emails)
           })
+
+          let gotToPersonButton = document.createElement('button')
+          gotToPersonButton.innerText = 'Open Person In Pipedrive'
+          callLogBox.appendChild(gotToPersonButton)
+          gotToPersonButton.onclick = () => window.open(`https://braustinmobilehomes.pipedrive.com/person/${response.data.id}`) 
+
+            gotToPersonButton.style.backgroundColor = 'lightGreen'
+            gotToPersonButton.style.borderRadius = '25px'
+            gotToPersonButton.style.padding = '5px'
+            gotToPersonButton.style.fontWeight = 'bold'
+            gotToPersonButton.style.marginTop = '10px'
+          
         }
-        if(response?.data?.length >= 1) {
+        if(response.type === 'deal') {
           response?.data?.forEach((response) => {
             
                 // foundInformationMessage.appendChild(callDirectionDiv)
@@ -354,8 +398,6 @@ const lookup = async (eventObj) => {
                 dealHeading.style.fontWeight = 'bold'
                 dataDiv.appendChild(dealHeading)
 
-
-                console.log('Response Data', response.title, response.update_time, response.creator_user_id.id, response.creator_user_id.name, response.creator_user_id.email, response.status)
                 let titleHeading = document.createElement('div')
                 titleHeading.innerText = `Title: ${response.title}`
                 dataDiv.appendChild(titleHeading)
@@ -376,7 +418,7 @@ const lookup = async (eventObj) => {
                 dataDiv.appendChild(lastUpdatedHeading)
               
                 let personDiv = document.createElement('div')
-                personDiv.innerText = 'Person Data'
+                personDiv.innerText = 'Person'
                 personDiv.style.fontWeight = 'bold'
                 dataDiv.appendChild(personDiv)
 
@@ -392,7 +434,7 @@ const lookup = async (eventObj) => {
                 dataDiv.appendChild(personPhoneNumber)
 
                 let ownerInformation = document.createElement('div')
-                ownerInformation.innerText = 'Owner Information'
+                ownerInformation.innerText = 'Owner'
                 ownerInformation.style.fontWeight = 'bold'
                 dataDiv.appendChild(ownerInformation)
 
@@ -403,6 +445,23 @@ const lookup = async (eventObj) => {
                 let creatorId = document.createElement('div')
                 creatorId.innerText = `Owner Id ${response.user_id.id}`
                 dataDiv.appendChild(creatorId)
+
+
+                let goToDealButton = document.createElement('button')
+          goToDealButton.innerText = 'Open Deal In PipeDrive'
+          callLogBox.appendChild(goToDealButton)
+          goToDealButton.onclick = () =>  window.open(
+            `https://braustinmobilehomes.pipedrive.com/deal/${response.id}`,
+            "_blank"
+          );
+
+            goToDealButton.style.backgroundColor = 'lightGreen'
+            goToDealButton.style.borderRadius = '25px'
+            goToDealButton.style.padding = '5px'
+            goToDealButton.style.fontWeight = 'bold'
+            goToDealButton.style.marginTop = '10px'
+          
+                
 
           })
         }
@@ -429,13 +488,13 @@ const lookup = async (eventObj) => {
           //   personDiv.innerText = personInfo
           //   callLogBox.appendChild(personDiv)
           // })
-          
         
-    }
   })
+
+
   
   let { type } = response
-  console.log(type, response.data)
+
   if (type === "deal") {
     window.open(
       `https://braustinmobilehomes.pipedrive.com/deal/${response.data[0].id}`,
