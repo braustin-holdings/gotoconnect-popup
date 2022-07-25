@@ -7,7 +7,7 @@ let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = [];
 const nextURL = "/";
-let serverURL = "http://localhost:3001";
+let serverURL = "$server_uri";
 let oauth;
 let eventData 
 
