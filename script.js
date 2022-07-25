@@ -7,7 +7,7 @@ let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = [];
 const nextURL = "/";
-let serverURL = "http://localhost:3001";
+let serverURL = `${process.env.server_url}`;
 let oauth;
 let eventData 
 let createLeadButton = document.createElement('button')
@@ -153,7 +153,7 @@ const createPDCusty = async (eventObj) => {
 
 const lookup = async (eventObj) => {
   let foundItem = localStorage.getItem('portalusertoken')
-  console.log(typeof foundItem)
+  
   const lookupResponse = await fetch(`${serverURL}/api/pipedrive`, {
     method: "POST",
     body: JSON.stringify(eventObj),
