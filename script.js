@@ -66,7 +66,7 @@ async function callApis() {
     session = await createSession();
 
     subscription = await subscribe();
-    let stringifiedSubscription = JSON.stringify(subscription);
+   
 
    
     socket = new WebSocket(session.ws);
@@ -108,6 +108,7 @@ async function subscribe() {
    
   
     // For this tutorial we will use the first line returned from potentially a larger list of lines.
+    console.log(firstLine)
     const account = firstLine.organization.id;
 
     const data = JSON.stringify([
