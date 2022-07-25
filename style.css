@@ -14,7 +14,10 @@ html {
     font-size: 18px;
 }
 
-
+.title {
+    font-size: 20px;
+    font-weight: bold;
+}
 .closeButton {
     background: lightgreen;
     padding: 10px;
@@ -39,35 +42,35 @@ html {
 
 #sessionTitle {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
 
 }
 #lineInfoTitle {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
 }
 #subscriberTitle {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 
 #callerTitle {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 #callDirection {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 #calleeTitle {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 #callDirectionTitle {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
 }
