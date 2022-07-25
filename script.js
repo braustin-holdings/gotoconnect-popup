@@ -7,7 +7,7 @@ let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = [];
 const nextURL = "/";
-let serverURL = "https://braustin-server.herokuapp.com/";
+let serverURL = "http://localhost:3001";
 let oauth;
 let eventData 
 let createLeadButton = document.createElement('button')
