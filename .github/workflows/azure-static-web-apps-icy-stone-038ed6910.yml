@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     env:
-      server_uri: "https://inbound.findmymobilehome.com"
+      server_uri: "https://braustin-server.herokuapp.com"
       goto_connect_client_id: $${{ secrets.GOTO_CONNECT_CLIENT_ID_PROD }}
     steps:
       - uses: actions/checkout@v2
