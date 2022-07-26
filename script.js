@@ -7,7 +7,7 @@ let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = [];
 const nextURL = "/";
-let serverURL = "http://localhost:3001";
+let serverURL = "$server_uri";
 let oauth;
 let eventData 
 let createLeadButton = document.createElement('button')
@@ -43,19 +43,16 @@ async function callApis() {
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  goToConnectClientId = urlParams.get("gotoconnectclientid");
+  goToConnectClientId = "$goto_connect_client_id"
   
   portalUserAuthToken = urlParams.get("portalusertoken");
-  if (goToConnectClientId) {
-    localStorage.setItem("gotoconnectclientid", goToConnectClientId);
-  }
   if (portalUserAuthToken) {
     localStorage.setItem("portalusertoken", portalUserAuthToken);
   }
 
   
   oauth = new OAuth({
-    clientId: localStorage.getItem("gotoconnectclientid"),
+    clientId: goToConnectClientId,
   });
 
   oauth.getToken().then(async (token) => {
