@@ -16,7 +16,7 @@ jobs:
     name: Build and Deploy Job
     env:
       server_uri: "https://braustin-server-staging.herokuapp.com"
-      goto_connect_client_id: $${{ secrets.GOTO_CONNECT_CLIENT_ID }}
+      goto_connect_client_id: ${{ secrets.GOTO_CONNECT_CLIENT_ID }}
     steps:
       - uses: actions/checkout@v2
         with:
