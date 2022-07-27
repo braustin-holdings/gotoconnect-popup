@@ -22,7 +22,7 @@ const setEvents = (event) => {
   events.push(event);
 };
 
-const closeWebSocket =  () => {
+const closeWebSocket = async () => {
   await socket.close();
   window.close();
 };
