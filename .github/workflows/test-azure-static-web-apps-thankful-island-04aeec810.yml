@@ -37,7 +37,11 @@ jobs:
           api_location: "" # Api source code path - optional
           output_location: "" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
+          server_url: 'https://braustin-server-staging.herokuapp.com/'
+
+=======
           deployment_environment: "Staging"
+>>>>>>> 67ae185f271c2dc2f4d5356ce156bfd6859c5342:.github/workflows/test-azure-static-web-apps-thankful-island-04aeec810.yml
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest

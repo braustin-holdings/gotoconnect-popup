@@ -1,8 +1,8 @@
 let socket;
-let lines = "";
-let session = "";
-let subscription = "";
-let events = [];
+let lines
+let session
+let subscription
+let events = []
 let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = [];
@@ -10,9 +10,11 @@ const nextURL = "/";
 let serverURL = "$server_uri";
 let oauth;
 let eventData 
-let createLeadButton = document.createElement('button')
+let buttonId = 0
+
 let callLogBox = document.createElement('div')
 let callEventReversed
+let createLeadButton
 
 
 //All that is occuring in the context will need to be handled in the script
@@ -30,8 +32,13 @@ const closeWebSocket = async () => {
 //Waiting for an announce type to avoid duplicate lookup function calls.
 const onMessage = async (event) => {
   const data = JSON.parse(event.data);
-  console.log('DATATATA', data.data)
-  eventData = data.data
+  
+  if(data.data != undefined || data.data != null){
+    eventData = data.data
+  } else {
+    return
+  }
+  console.log('DATATATA', eventData)
   if (data.type === "announce") {
     lookup(data);
   } else {
@@ -133,7 +140,7 @@ async function subscribe() {
 }
 
 const createPDCusty = async (eventObj) => {
-  createLeadButton.disabled = true
+  
   console.log('We made it', eventData)
   let foundItem = localStorage.getItem('portalusertoken')
   const createdCusty = await fetch(`${serverURL}/api/pipedrive/createCusty`, {
@@ -144,13 +151,19 @@ const createPDCusty = async (eventObj) => {
       "Content-Type": "application/json",
     }
   })
+  let response = await createdCusty.json()
+  window.open(
+    `https://braustinmobilehomes.pipedrive.com/leads/inbox/${response.data.id}`,
+    "_blank"
+  );
+  return response
 }
 
 
 
 const lookup = async (eventObj) => {
   let foundItem = localStorage.getItem('portalusertoken')
-  console.log(typeof foundItem)
+  
   const lookupResponse = await fetch(`${serverURL}/api/pipedrive`, {
     method: "POST",
     body: JSON.stringify(eventObj),
@@ -176,18 +189,18 @@ const lookup = async (eventObj) => {
   
   console.log('Reversed array', callEventArray)
   //Decision Log
-  callLogBox.remove()
-
+ 
+  console.log("Call Event Array", callEventArray)
   callEventArray.forEach((response, index) => {
-      console.log(response, index)
+
       callLogBox = document.createElement('div')
       callLogBox.style.backgroundColor = 'white'
       callLogBox.style.margin = '20px 30px 30px 30px'
       callLogBox.style.borderRadius = '10px'
       callLogBox.style.padding = '5px'
       callLogBox.style.fontSize = '18px'
+      callLogBox.setAttribute('data-id', index)
       callLogContainer.appendChild(callLogBox)
-
       let timeStamp = document.createElement('div')
       let time = response.time
 
@@ -260,18 +273,86 @@ const lookup = async (eventObj) => {
       // callLogBox.appendChild(foundInformationMessage)
         
         if(response.type === 'lead'){
-          // if(response.create) {
-
-          // }
           if(response.requestToCreateCusty) {
-           
+            
+            createLeadButton = document.createElement('button')
+            createLeadButton.setAttribute('data-id', index)
             createLeadButton.innerText = 'Create A Lead +'
-            callLogBox.appendChild(createLeadButton)
             createLeadButton.style.backgroundColor = 'lightGreen'
             createLeadButton.style.borderRadius = '25px'
             createLeadButton.style.padding = '5px'
             createLeadButton.style.fontWeight = 'bold'
-            createLeadButton.addEventListener("click", createPDCusty)
+            
+            createLeadButton.addEventListener("click", async (e) => {
+              response.type = 'newlyCreatedLead'
+              response.requestToCreateCusty = false
+              let value  = e.target.getAttribute('data-id')
+              const parentCallLogBox = document.querySelector(`[data-id="${value}"]`)
+              
+              e.target.disabled = true
+             
+              let createPDCustyResponse = await createPDCusty()
+              response.data = createPDCustyResponse 
+              
+
+              
+            
+          let foundDocument = document.createElement('div')
+          
+          foundDocument.style.marginTop = '15px'
+          foundDocument.style.fontSize = '18px'
+          foundDocument.innerText = 'Congrats a lead was created and contains the following information!'
+          foundDocument.style.fontWeight = 'bold'
+          parentCallLogBox.appendChild(foundDocument)
+
+          let leadNameTitle = document.createElement('div')
+          leadNameTitle.innerText = `Title: ${createPDCustyResponse?.data?.title}`
+          parentCallLogBox.appendChild(leadNameTitle)
+          
+          let leadIdTitle = document.createElement('div')
+          leadIdTitle.innerText = `ID: ${createPDCustyResponse.data.id}`
+          parentCallLogBox.appendChild(leadIdTitle)
+
+          let isArchivedTitle = document.createElement('div')
+          isArchivedTitle.innerText = `Is Archived?: ${createPDCustyResponse.data.is_archived}`
+          parentCallLogBox.appendChild(isArchivedTitle)
+          
+          let personTab = document.createElement('div')
+          personTab.innerText = 'Person'
+          personTab.style.fontWeight = 'bold'
+          parentCallLogBox.appendChild(personTab)
+
+          // let personNameTitle = document.createElement('div')
+          // personNameTitle.innerText = `Name: ${createPDCustyResponse.data.person.name}`
+          // parentCallLogBox.appendChild(personNameTitle)
+          
+          let personIdTitle = document.createElement('div')
+          personIdTitle.innerText = `ID: ${createPDCustyResponse.data.id}`
+          parentCallLogBox.appendChild(personIdTitle)
+          
+          let ownerTab = document.createElement('div')
+          ownerTab.innerText = 'Owner'
+          ownerTab.style.fontWeight = 'bold'
+          parentCallLogBox.appendChild(ownerTab)
+
+          let ownerIdTitle = document.createElement('div')
+          ownerIdTitle.innerText = `ID: ${createPDCustyResponse.data.owner_id}`
+          parentCallLogBox.appendChild(ownerIdTitle)
+
+       
+          let goToLeadButton = document.createElement('button')
+          goToLeadButton.innerText = 'Open Lead In Pipedrive'
+          parentCallLogBox.appendChild(goToLeadButton)
+
+            goToLeadButton.style.backgroundColor = 'lightGreen'
+            goToLeadButton.style.borderRadius = '25px'
+            goToLeadButton.style.padding = '5px'
+            goToLeadButton.style.fontWeight = 'bold'
+            goToLeadButton.style.marginTop = '10px'
+          
+            })
+        
+            callLogBox.appendChild(createLeadButton)
             
             
             return
@@ -288,11 +369,11 @@ const lookup = async (eventObj) => {
           callLogBox.appendChild(leadNameTitle)
           
           let leadIdTitle = document.createElement('div')
-          leadIdTitle.innerText = `ID: ${response.data.id}`
+          leadIdTitle.innerText = `ID: ${response?.data?.id}`
           callLogBox.appendChild(leadIdTitle)
 
           let isArchivedTitle = document.createElement('div')
-          isArchivedTitle.innerText = `Is Archived?: ${response.data.is_archived}`
+          isArchivedTitle.innerText = `Is Archived?: ${response?.data?.is_archived}`
           callLogBox.appendChild(isArchivedTitle)
           
           let personTab = document.createElement('div')
@@ -301,11 +382,11 @@ const lookup = async (eventObj) => {
           callLogBox.appendChild(personTab)
 
           let personNameTitle = document.createElement('div')
-          personNameTitle.innerText = `Name: ${response.data.person.name}`
+          personNameTitle.innerText = `Name: ${response?.data?.person.name}`
           callLogBox.appendChild(personNameTitle)
           
           let personIdTitle = document.createElement('div')
-          personIdTitle.innerText = `ID: ${response.data.id}`
+          personIdTitle.innerText = `ID: ${response?.data?.id}`
           callLogBox.appendChild(personIdTitle)
           
           let ownerTab = document.createElement('div')
@@ -314,7 +395,7 @@ const lookup = async (eventObj) => {
           callLogBox.appendChild(ownerTab)
 
           let ownerIdTitle = document.createElement('div')
-          ownerIdTitle.innerText = `ID: ${response.data.owner.id}`
+          ownerIdTitle.innerText = `ID: ${response?.data?.owner?.id}`
           callLogBox.appendChild(ownerIdTitle)
 
        
@@ -377,8 +458,7 @@ const lookup = async (eventObj) => {
             gotToPersonButton.style.fontWeight = 'bold'
             gotToPersonButton.style.marginTop = '10px'
           
-        }
-        if(response.type === 'deal') {
+        } else if(response.type === 'deal') {
           response?.data?.forEach((response) => {
             
                 // foundInformationMessage.appendChild(callDirectionDiv)
@@ -462,6 +542,61 @@ const lookup = async (eventObj) => {
                 
 
           })
+        } else if(response.type === "newlyCreatedLead"){
+          console.log('logging inside of the else if under newlycratedlead :) ')
+          let foundDocument = document.createElement('div')
+          
+          foundDocument.style.marginTop = '15px'
+          foundDocument.style.fontSize = '18px'
+          foundDocument.innerText = 'Congrats a lead was created and contains the following information!'
+          foundDocument.style.fontWeight = 'bold'
+          callLogBox.appendChild(foundDocument)
+
+          let leadNameTitle = document.createElement('div')
+          leadNameTitle.innerText = `Title: ${response?.data?.data.title}`
+          callLogBox.appendChild(leadNameTitle)
+          
+          let leadIdTitle = document.createElement('div')
+          leadIdTitle.innerText = `ID: ${response.data.data.id}`
+          callLogBox.appendChild(leadIdTitle)
+
+          let isArchivedTitle = document.createElement('div')
+          isArchivedTitle.innerText = `Is Archived?: ${response.data.data.is_archived}`
+          callLogBox.appendChild(isArchivedTitle)
+          
+          let personTab = document.createElement('div')
+          personTab.innerText = 'Person'
+          personTab.style.fontWeight = 'bold'
+          callLogBox.appendChild(personTab)
+
+          // let personNameTitle = document.createElement('div')
+          // personNameTitle.innerText = `Name: ${createPDCustyResponse.data.person.name}`
+          // callLogBox.appendChild(personNameTitle)
+          
+          let personIdTitle = document.createElement('div')
+          personIdTitle.innerText = `ID: ${response.data.data.id}`
+          callLogBox.appendChild(personIdTitle)
+          
+          let ownerTab = document.createElement('div')
+          ownerTab.innerText = 'Owner'
+          ownerTab.style.fontWeight = 'bold'
+          callLogBox.appendChild(ownerTab)
+
+          let ownerIdTitle = document.createElement('div')
+          ownerIdTitle.innerText = `ID: ${response.data.data.owner_id}`
+          callLogBox.appendChild(ownerIdTitle)
+
+       
+          let goToLeadButton = document.createElement('button')
+          goToLeadButton.innerText = 'Open Lead In Pipedrive'
+          callLogBox.appendChild(goToLeadButton)
+
+            goToLeadButton.style.backgroundColor = 'lightGreen'
+            goToLeadButton.style.borderRadius = '25px'
+            goToLeadButton.style.padding = '5px'
+            goToLeadButton.style.fontWeight = 'bold'
+            goToLeadButton.style.marginTop = '10px'
+          
         }
         
         
@@ -495,17 +630,17 @@ const lookup = async (eventObj) => {
 
   if (type === "deal") {
     window.open(
-      `https://braustinmobilehomes.pipedrive.com/deal/${response.data[0].id}`,
+      `https://braustinmobilehomes.pipedrive.com/deal/${response?.data[0].id}`,
       "_blank"
     );
-  } else if (type === "lead" && !response.requestToCreateCusty) {
+  } else if (type === "lead" && response.requestToCreateCusty != true) {
     window.open(
-      `https://braustinmobilehomes.pipedrive.com/leads/inbox/${response.data.id}`,
+      `https://braustinmobilehomes.pipedrive.com/leads/inbox/${response?.data?.id}`,
       "_blank"
     );
     
   } else if (type === 'person'){
-     window.open(`https://braustinmobilehomes.pipedrive.com/person/${response.data.id}`) 
+     window.open(`https://braustinmobilehomes.pipedrive.com/person/${response?.data.id}`) 
   }
   else {
     console.log("We couldnt determine the type. Sorry...");
