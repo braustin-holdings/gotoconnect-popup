@@ -59,21 +59,21 @@ async function callApis() {
     clientId: envVars.goToConnectClientId,
   });
 
-  // oauth.getToken().then(async (token) => {
-  //   history.replaceState({ id: 1 }, "", nextURL);
-  //   goToConnectAuthToken = token;
-  //   lines = await getLineInfo();
+  oauth.getToken().then(async (token) => {
+    history.replaceState({ id: 1 }, "", nextURL);
+    goToConnectAuthToken = token;
+    lines = await getLineInfo();
    
-  //   session = await createSession();
+    session = await createSession();
 
-  //   subscription = await subscribe();
+    subscription = await subscribe();
    
 
    
-  //   socket = new WebSocket(session.ws);
-  //   socket.addEventListener("message", onMessage);
+    socket = new WebSocket(session.ws);
+    socket.addEventListener("message", onMessage);
   
-  // });
+  });
 }
 
 async function getLineInfo() {
