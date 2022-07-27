@@ -22,7 +22,7 @@ const setEvents = (event) => {
   events.push(event);
 };
 
-const closeWebSocket = async () => {
+const closeWebSocket =  () => {
   await socket.close();
   window.close();
 };
@@ -56,7 +56,7 @@ async function callApis() {
 
  
   oauth = new OAuth({
-    clientId: envVars.goToConnectClientId,
+    clientId: "d303fe6e-15db-4b2c-a91a-e8e470a4869d",
   });
 
   oauth.getToken().then(async (token) => {
@@ -73,7 +73,7 @@ async function callApis() {
     socket = new WebSocket(session.ws);
     socket.addEventListener("message", onMessage);
   
-  });
+  }); 
 }
 
 async function getLineInfo() {
@@ -554,11 +554,11 @@ const lookup = async (eventObj) => {
           callLogBox.appendChild(leadNameTitle)
           
           let leadIdTitle = document.createElement('div')
-          leadIdTitle.innerText = `ID: ${response.data.data.id}`
+          leadIdTitle.innerText = `ID: ${response?.data?.data.id}`
           callLogBox.appendChild(leadIdTitle)
 
           let isArchivedTitle = document.createElement('div')
-          isArchivedTitle.innerText = `Is Archived?: ${response.data.data.is_archived}`
+          isArchivedTitle.innerText = `Is Archived?: ${response?.data?.data?.is_archived}`
           callLogBox.appendChild(isArchivedTitle)
           
           let personTab = document.createElement('div')
@@ -571,7 +571,7 @@ const lookup = async (eventObj) => {
           // callLogBox.appendChild(personNameTitle)
           
           let personIdTitle = document.createElement('div')
-          personIdTitle.innerText = `ID: ${response.data.data.id}`
+          personIdTitle.innerText = `ID: ${response?.data?.data?.id}`
           callLogBox.appendChild(personIdTitle)
           
           let ownerTab = document.createElement('div')
@@ -580,7 +580,7 @@ const lookup = async (eventObj) => {
           callLogBox.appendChild(ownerTab)
 
           let ownerIdTitle = document.createElement('div')
-          ownerIdTitle.innerText = `ID: ${response.data.data.owner_id}`
+          ownerIdTitle.innerText = `ID: ${response?.data?.data?.owner_id}`
           callLogBox.appendChild(ownerIdTitle)
 
        
