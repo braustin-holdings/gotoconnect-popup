@@ -1,17 +1,15 @@
-let socket;
+let socket
 let lines
 let session
 let subscription
 let events = []
-let goToConnectAuthToken;
-let portalUserAuthToken;
+let goToConnectAuthToken
+let portalUserAuthToken
 let callEventArray = [];
-const nextURL = "/";
+const nextURL = "/"
 let serverURL = "$server_uri";
 let oauth;
 let eventData 
-let buttonId = 0
-
 let callLogBox = document.createElement('div')
 let callEventReversed
 let createLeadButton
