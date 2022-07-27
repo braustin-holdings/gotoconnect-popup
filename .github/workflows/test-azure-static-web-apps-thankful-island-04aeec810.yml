@@ -37,7 +37,6 @@ jobs:
           api_location: "" # Api source code path - optional
           output_location: "" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
-<<<<<<< HEAD:.github/workflows/azure-static-web-apps-thankful-island-04aeec810.yml
           server_url: 'https://braustin-server-staging.herokuapp.com/'
 
 =======
