@@ -1,8 +1,8 @@
 let socket;
-let lines = "";
-let session = "";
-let subscription = "";
-let events = [];
+let lines
+let session
+let subscription
+let events = []
 let goToConnectAuthToken;
 let portalUserAuthToken;
 let callEventArray = [];
