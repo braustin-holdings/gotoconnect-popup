@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-eval "echo \"$(cat script.js)\"" > script.js
+eval "echo \"$(cat envVars.js)\"" > envVars.js
+cat envVars.js
