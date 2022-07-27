@@ -17,6 +17,7 @@ import envVars from "./envVars.js"
 
 //All that is occuring in the context will need to be handled in the script
 //Install Oauth
+console.log(envVars.goToConnectClientId)
 
 const setEvents = (event) => {
   events.push(event);
@@ -54,26 +55,26 @@ async function callApis() {
     localStorage.setItem("portalusertoken", portalUserAuthToken);
   }
 
-  console.log(envVars.goToConnectClientId)
+ 
   oauth = new OAuth({
     clientId: envVars.goToConnectClientId,
   });
 
-  oauth.getToken().then(async (token) => {
-    history.replaceState({ id: 1 }, "", nextURL);
-    goToConnectAuthToken = token;
-    lines = await getLineInfo();
+  // oauth.getToken().then(async (token) => {
+  //   history.replaceState({ id: 1 }, "", nextURL);
+  //   goToConnectAuthToken = token;
+  //   lines = await getLineInfo();
    
-    session = await createSession();
+  //   session = await createSession();
 
-    subscription = await subscribe();
+  //   subscription = await subscribe();
    
 
    
-    socket = new WebSocket(session.ws);
-    socket.addEventListener("message", onMessage);
+  //   socket = new WebSocket(session.ws);
+  //   socket.addEventListener("message", onMessage);
   
-  });
+  // });
 }
 
 async function getLineInfo() {
