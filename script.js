@@ -5,15 +5,15 @@ let subscription
 let events = []
 let goToConnectAuthToken
 let portalUserAuthToken
-let callEventArray = [];
+let callEventArray = []
 const nextURL = "/"
-let serverURL = "$server_uri";
-let oauth;
+let oauth
 let eventData 
 let callLogBox = document.createElement('div')
 let callEventReversed
 let createLeadButton
 
+import envVars from "./envVars.js"
 
 //All that is occuring in the context will need to be handled in the script
 //Install Oauth
@@ -48,7 +48,6 @@ async function callApis() {
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  goToConnectClientId = "$goto_connect_client_id"
   
   portalUserAuthToken = urlParams.get("portalusertoken");
   if (portalUserAuthToken) {
@@ -57,7 +56,7 @@ async function callApis() {
 
   
   oauth = new OAuth({
-    clientId: goToConnectClientId,
+    clientId: envVars.goToConnectClientId,
   });
 
   oauth.getToken().then(async (token) => {
@@ -141,7 +140,7 @@ const createPDCusty = async (eventObj) => {
   
   console.log('We made it', eventData)
   let foundItem = localStorage.getItem('portalusertoken')
-  const createdCusty = await fetch(`${serverURL}/api/pipedrive/createCusty`, {
+  const createdCusty = await fetch(`${envVars.serverURL}/api/pipedrive/createCusty`, {
     method: "POST",
     body: JSON.stringify(eventData),
     headers: {
@@ -162,7 +161,7 @@ const createPDCusty = async (eventObj) => {
 const lookup = async (eventObj) => {
   let foundItem = localStorage.getItem('portalusertoken')
   
-  const lookupResponse = await fetch(`${serverURL}/api/pipedrive`, {
+  const lookupResponse = await fetch(`${envVars.serverURL}/api/pipedrive`, {
     method: "POST",
     body: JSON.stringify(eventObj),
     headers: {
