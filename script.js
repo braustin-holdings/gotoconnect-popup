@@ -54,7 +54,7 @@ async function callApis() {
     localStorage.setItem("portalusertoken", portalUserAuthToken);
   }
 
-  
+  console.log(envVars.goToConnectClientId)
   oauth = new OAuth({
     clientId: envVars.goToConnectClientId,
   });
