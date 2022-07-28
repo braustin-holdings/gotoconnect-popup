@@ -10,9 +10,8 @@ const nextURL = "/"
 let oauth
 let eventData 
 let callLogBox = document.createElement('div')
-let callEventReversed
 let createLeadButton
-
+let stopListeningButton = document.getElementById('stopListeningButton')
 import envVars from "./envVars.js"
 
 //All that is occuring in the context will need to be handled in the script
@@ -22,11 +21,12 @@ const setEvents = (event) => {
   events.push(event);
 };
 
-const closeWebSocket = async () => {
+const closeWebSocket =  async () => {
   await socket.close();
   window.close();
 };
 
+stopListeningButton.addEventListener('click', closeWebSocket)
 //Waiting for an announce type to avoid duplicate lookup function calls.
 const onMessage = async (event) => {
   const data = JSON.parse(event.data);
@@ -36,7 +36,6 @@ const onMessage = async (event) => {
   } else {
     return
   }
-  console.log('DATATATA', eventData)
   if (data.type === "announce") {
     lookup(data);
   } else {
@@ -54,7 +53,6 @@ async function callApis() {
     localStorage.setItem("portalusertoken", portalUserAuthToken);
   }
 
- 
   oauth = new OAuth({
     clientId: "d303fe6e-15db-4b2c-a91a-e8e470a4869d",
   });
@@ -67,9 +65,7 @@ async function callApis() {
     session = await createSession();
 
     subscription = await subscribe();
-   
 
-   
     socket = new WebSocket(session.ws);
     socket.addEventListener("message", onMessage);
   
@@ -109,7 +105,6 @@ async function subscribe() {
    
   
     // For this tutorial we will use the first line returned from potentially a larger list of lines.
-    console.log(firstLine)
     const account = firstLine.organization.id;
 
     const data = JSON.stringify([
@@ -169,10 +164,7 @@ const lookup = async (eventObj) => {
       "Content-Type": "application/json",
     },
   }
- 
   );
-
-  
 
   let initialResponse = lookupResponse;
   const response = await initialResponse.json();
@@ -182,12 +174,7 @@ const lookup = async (eventObj) => {
   callLogContainer.innerHTML = ''
   let message = response.message;
   callEventArray.unshift(response)
-
-  
-  console.log('Reversed array', callEventArray)
   //Decision Log
- 
-  console.log("Call Event Array", callEventArray)
   callEventArray.forEach((response, index) => {
 
       callLogBox = document.createElement('div')
@@ -231,19 +218,7 @@ const lookup = async (eventObj) => {
       flexBox3.style.alignItems = 'center'
       callLogBox.appendChild(flexBox3)
 
-      // let directionTitle = document.createElement('div')
-      // directionTitle.innerText = 'Call Direction:'
-      // directionTitle.classList.add('title')
-      // flexBox3.appendChild(directionTitle)
-      // let callDirectionDiv = document.createElement('div')
-      // callDirectionDiv.classList.add('callInformation')
-      // flexBox3.appendChild(callDirectionDiv)
-      // callDirectionDiv.innerText = response.direction
-      
      
-
-      
-
       let eventLogicProcessContainer = document.createElement('div')
       callLogBox.appendChild(eventLogicProcessContainer)
       eventLogicProcessContainer.style.margin = '10px 0 10px 0'
@@ -258,17 +233,6 @@ const lookup = async (eventObj) => {
         eventLogicProcessContainer.appendChild(processInformation)
       })
 
-      
-      // let messageTitle = document.createElement('div')
-      // messageTitle.innerText = 'Result Message:'
-      // messageTitle.classList.add('title')
-      // callLogBox.appendChild(messageTitle)
-
-      // let foundInformationMessage = document.createElement("div");
-      // foundInformationMessage.innerText = message
-      // foundInformationMessage.classList.add('callInformation')
-      // callLogBox.appendChild(foundInformationMessage)
-        
         if(response.type === 'lead'){
           if(response.requestToCreateCusty) {
             
@@ -290,10 +254,7 @@ const lookup = async (eventObj) => {
              
               let createPDCustyResponse = await createPDCusty()
               response.data = createPDCustyResponse 
-              
-
-              
-            
+      
           let foundDocument = document.createElement('div')
           
           foundDocument.style.marginTop = '15px'
@@ -319,10 +280,6 @@ const lookup = async (eventObj) => {
           personTab.style.fontWeight = 'bold'
           parentCallLogBox.appendChild(personTab)
 
-          // let personNameTitle = document.createElement('div')
-          // personNameTitle.innerText = `Name: ${createPDCustyResponse.data.person.name}`
-          // parentCallLogBox.appendChild(personNameTitle)
-          
           let personIdTitle = document.createElement('div')
           personIdTitle.innerText = `ID: ${createPDCustyResponse.data.id}`
           parentCallLogBox.appendChild(personIdTitle)
@@ -346,12 +303,12 @@ const lookup = async (eventObj) => {
             goToLeadButton.style.padding = '5px'
             goToLeadButton.style.fontWeight = 'bold'
             goToLeadButton.style.marginTop = '10px'
-          
+            goToLeadButton.onclick = () => window.open(
+              `https://braustinmobilehomes.pipedrive.com/leads/inbox/${createPDCustyResponse.data.id}`,
+              "_blank"
+            );
             })
-        
             callLogBox.appendChild(createLeadButton)
-            
-            
             return
           }
           let foundDocument = document.createElement('div')
@@ -485,9 +442,6 @@ const lookup = async (eventObj) => {
                 status.innerText = `Status: ${response.status}`
                 dataDiv.appendChild(status)
 
-          
-
-
                 let lastUpdatedHeading = document.createElement('div')
                 lastUpdatedHeading.innerText = `Last Updated: ${response.update_time}`
                 dataDiv.appendChild(lastUpdatedHeading)
@@ -529,18 +483,14 @@ const lookup = async (eventObj) => {
             `https://braustinmobilehomes.pipedrive.com/deal/${response.id}`,
             "_blank"
           );
-
             goToDealButton.style.backgroundColor = 'lightGreen'
             goToDealButton.style.borderRadius = '25px'
             goToDealButton.style.padding = '5px'
             goToDealButton.style.fontWeight = 'bold'
             goToDealButton.style.marginTop = '10px'
           
-                
-
           })
         } else if(response.type === "newlyCreatedLead"){
-          console.log('logging inside of the else if under newlycratedlead :) ')
           let foundDocument = document.createElement('div')
           
           foundDocument.style.marginTop = '15px'
@@ -566,10 +516,6 @@ const lookup = async (eventObj) => {
           personTab.style.fontWeight = 'bold'
           callLogBox.appendChild(personTab)
 
-          // let personNameTitle = document.createElement('div')
-          // personNameTitle.innerText = `Name: ${createPDCustyResponse.data.person.name}`
-          // callLogBox.appendChild(personNameTitle)
-          
           let personIdTitle = document.createElement('div')
           personIdTitle.innerText = `ID: ${response?.data?.data?.id}`
           callLogBox.appendChild(personIdTitle)
@@ -593,36 +539,8 @@ const lookup = async (eventObj) => {
             goToLeadButton.style.padding = '5px'
             goToLeadButton.style.fontWeight = 'bold'
             goToLeadButton.style.marginTop = '10px'
-          
         }
-        
-        
-      //   if (data?.length <= 1) {
-
-      
-      //   } else {
-      //     let messageTitle = document.createElement('div')
-      //     messageTitle.innerText = 'Result Message:'
-      //     messageTitle.classList.add('title')
-      //     callLogBox.appendChild(messageTitle)
-
-      //     foundInformationMessage.innerText = message
-      //     foundInformationMessage.classList.add('callInformation')
-      //     callLogBox.appendChild(foundInformationMessage)
-        
-          // data?.forEach((person) => {
-          //   let personInfo = JSON.stringify(person)
-          //   let personDiv = document.createElement('div')
-          //   personDiv.style.marginTop = '10px'
-          //   console.log('personInfo', personInfo)
-          //   personDiv.innerText = personInfo
-          //   callLogBox.appendChild(personDiv)
-          // })
-        
   })
-
-
-  
   let { type } = response
 
   if (type === "deal") {
