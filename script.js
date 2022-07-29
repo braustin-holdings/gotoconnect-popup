@@ -10,6 +10,7 @@ const nextURL = "/"
 let oauth
 let eventData 
 let callLogBox = document.createElement('div')
+
 let createLeadButton
 let stopListeningButton = document.getElementById('stopListeningButton')
 import envVars from "./envVars.js"
@@ -92,17 +93,49 @@ async function subscribe() {
     const firstLine = lines?.items[0];
 
     let calleeTitle = document.getElementById('salesRepTitle')
-      calleeTitle.innerText = 'Sales Rep Information:'
+      calleeTitle.innerText = 'Currently Signed:'
       calleeTitle.classList.add('title')
       
-     
-      let calleeName = document.getElementById('salesRepName')
-      calleeName.innerText = `Name: ${lines.items[0].name}` 
-     
-     
-      let calleeNumber = document.getElementById('salesRepExtension')
-      calleeNumber.innerText = `Number: ${lines.items[0].number}`
+    let box = document.getElementById('box')
    
+
+     let salesRepNameContainer = document.createElement('div')
+     salesRepNameContainer.style.display = 'flex'
+     salesRepNameContainer.style.alignItems = 'center'
+     salesRepNameContainer.style.marginTop = '5px'
+     box.appendChild(salesRepNameContainer)
+
+     let salesRepIcon = document.createElement('i')
+     salesRepIcon.classList.add('fa-solid')
+     salesRepIcon.classList.add('fa-user')
+     salesRepIcon.classList.add('icon')
+     salesRepIcon.style.marginRight = '7px'
+     salesRepNameContainer.appendChild(salesRepIcon)
+
+  
+
+      let calleeName = document.createElement('div')
+      calleeName.innerText = `${lines.items[0].name}`
+      calleeName.classList.add('lineInformation')
+      salesRepNameContainer.appendChild(calleeName)
+
+      let extensionContainer = document.createElement('div')
+      extensionContainer.style.display = 'flex'
+      extensionContainer.style.alignItems = 'center'
+      extensionContainer.style.marginTop = '10px'
+      box.appendChild(extensionContainer)
+     
+      let phoneIcon = document.createElement('i')
+      phoneIcon.classList.add('fa-phone')
+      phoneIcon.classList.add("fa-solid")
+      phoneIcon.classList.add('icon')
+      phoneIcon.style.marginRight = '7px'
+      extensionContainer.appendChild(phoneIcon)
+
+      let calleeNumber = document.createElement('div')
+      calleeNumber.innerText = `${lines.items[0].number}`
+      calleeNumber.classList.add('lineInformation')
+      extensionContainer.appendChild(calleeNumber)
   
     // For this tutorial we will use the first line returned from potentially a larger list of lines.
     const account = firstLine.organization.id;
@@ -135,7 +168,7 @@ const createPDCusty = async (eventObj) => {
   
   console.log('We made it', eventData)
   let foundItem = localStorage.getItem('portalusertoken')
-  const createdCusty = await fetch(`${envVars.serverURL}/api/pipedrive/createCusty`, {
+  const createdCusty = await fetch(`http://localhost:3001/api/pipedrive/createCusty`, {
     method: "POST",
     body: JSON.stringify(eventData),
     headers: {
@@ -156,7 +189,7 @@ const createPDCusty = async (eventObj) => {
 const lookup = async (eventObj) => {
   let foundItem = localStorage.getItem('portalusertoken')
   
-  const lookupResponse = await fetch(`${envVars.serverURL}/api/pipedrive`, {
+  const lookupResponse = await fetch(`http://localhost:3001/api/pipedrive`, {
     method: "POST",
     body: JSON.stringify(eventObj),
     headers: {
@@ -172,246 +205,286 @@ const lookup = async (eventObj) => {
   
   let callLogContainer = document.getElementById('callLogContainer')
   callLogContainer.innerHTML = ''
-  let message = response.message;
   callEventArray.unshift(response)
   //Decision Log
   callEventArray.forEach((response, index) => {
+  
+    let inboundCallContainer = document.createElement('div')
+    inboundCallContainer.style.display = 'flex'
+    callLogBox.appendChild(inboundCallContainer)
+    let timeStamp = document.createElement('div')
+    let time = response.time
 
-      callLogBox = document.createElement('div')
+    timeStamp.innerText = `Inbound Call @ ${time}`
+    timeStamp.style.fontSize = '20px'
+    timeStamp.style.fontWeight = 'bold'
+    timeStamp.style.color = '#1b406a'
+    inboundCallContainer.appendChild(timeStamp)
+
+    // let callerDiv = document.createElement('div')
+    // let callerData = JSON.stringify(response.caller)
+    let callerInfoBox1 = document.createElement('div')
+
+    callerInfoBox1.style.display = 'flex'
+    callerInfoBox1.style.alignItems = 'center'
+    inboundCallContainer.appendChild(callerInfoBox1)
+    let callerIcon = document.createElement('i')
+    callerIcon.classList.add('fa-solid')
+    callerIcon.classList.add('fa-user')
+    callerIcon.classList.add('icon')
+    callerIcon.style.marginRight = '7px'
+
+    callerInfoBox1.appendChild(callerIcon)
+    let callerName = document.createElement('div')
+    callerName.innerText = `${response?.caller.name}`
+    callerName.style.fontWeight = 'bold'
+    callerInfoBox1.appendChild(callerName)
+
+    let callerInfoBox2 = document.createElement('div')
+    callerInfoBox2.style.display = 'flex'
+    callerInfoBox2.style.alignItems = 'center'
+    callerInfoBox2.style.marginTop = '10px'
+    inboundCallContainer.appendChild(callerInfoBox2)
+
+  let phoneIcon = document.createElement('i')
+    phoneIcon.classList.add('fa-phone')
+    phoneIcon.classList.add("fa-solid")
+    phoneIcon.classList.add('icon')
+    phoneIcon.style.marginRight = '7px'
+    callerInfoBox2.appendChild(phoneIcon)
+
+  let callerNumber = document.createElement('div')
+  callerNumber.innerText = `${response?.caller.number}`
+  callerNumber.style.fontWeight = 'bold'
+  callerInfoBox2.appendChild(callerNumber)
+
+
+
       callLogBox.style.backgroundColor = 'white'
       callLogBox.style.margin = '20px 30px 30px 30px'
       callLogBox.style.borderRadius = '10px'
       callLogBox.style.padding = '5px'
       callLogBox.style.fontSize = '18px'
+      callLogBox.classList.add('callLogBox')
       callLogBox.setAttribute('data-id', index)
       callLogContainer.appendChild(callLogBox)
-      let timeStamp = document.createElement('div')
-      let time = response.time
 
-      timeStamp.innerText = time
-      timeStamp.style.fontSize = '20px'
-      timeStamp.style.fontWeight = 'bold'
-      timeStamp.style.color = '#1b406a'
-      callLogBox.appendChild(timeStamp)
-
-
-      let callerTitle = document.createElement('div')
-      callerTitle.innerText = 'Caller Information:'
-      callerTitle.classList.add('title')
-      callLogBox.appendChild(callerTitle)
-
-      // let callerDiv = document.createElement('div')
-      // let callerData = JSON.stringify(response.caller)
-
-      let callerName = document.createElement('div')
-      callerName.innerText = ` Name: ${response.caller.name}`
-      callLogBox.appendChild(callerName)
-
-      let callerNumber = document.createElement('div')
-      callerNumber.innerText = `Number: ${response.caller.number}`
-      callLogBox.appendChild(callerNumber)
-  
-
-      
-      let flexBox3 = document.createElement('div')
-      flexBox3.style.display = 'flex'
-      flexBox3.style.alignItems = 'center'
-      callLogBox.appendChild(flexBox3)
+      let innerCallLogBox = document.createElement('div')
+      innerCallLogBox.classList.add('innerCallLogBox')
+      callLogBox.appendChild(innerCallLogBox)
 
      
-      let eventLogicProcessContainer = document.createElement('div')
-      callLogBox.appendChild(eventLogicProcessContainer)
-      eventLogicProcessContainer.style.margin = '10px 0 10px 0'
-      response?.eventLogicProcess?.map((event) => {
-        let processInformation = document.createElement('div')
-        processInformation.innerText = event
-        if(event.includes('found')) {
-          processInformation.style.color = 'green'
-        } else {
-          processInformation.style.color = 'red'
-        }
-        eventLogicProcessContainer.appendChild(processInformation)
-      })
+      //TODO: This is where we should create a new container
+
+      
 
         if(response.type === 'lead'){
           if(response.requestToCreateCusty) {
+
+            let inputContainer = document.createElement('div')
+            inputContainer.style.display = 'flex'
+            inputContainer.style.flexDirection = 'column'
+
+            innerCallLogBox.appendChild(inputContainer)
+
+            let inputNameLabel = document.createElement('label')
+            inputNameLabel.setAttribute('aria-label', 'Enter a name for the newly created lead.')
             
+            let inputPhoneNumberLabel = document.createElement('label')
+            inputPhoneNumberLabel.setAttribute('aria-label', 'Enter a phone number for the newly created lead.')
+            
+              
+
+            
+            let inputTitle = document.createElement('div')
+            inputTitle.innerText = '**NOTE: Fill out the input boxes below if you want to manually input the information used to create a lead otherwise by clicking the create lead button it will use the information from the call.'
+            inputTitle.style.width = '50%'
+
+            inputContainer.appendChild(inputTitle)
+
+            inputContainer.appendChild(inputNameLabel)
+            inputContainer.appendChild(inputPhoneNumberLabel)
+
+            let nameInputBox = document.createElement('input')
+            nameInputBox.setAttribute('placeholder', 'Name')
+            nameInputBox.setAttribute('id', 'nameInput')
+            nameInputBox.classList.add('inputBox')
+
+            let phoneNumberInputBox = document.createElement('input')
+            phoneNumberInputBox.setAttribute('placeholder', 'Phone Number')
+            phoneNumberInputBox.setAttribute('type', 'tel')
+            phoneNumberInputBox.setAttribute('id', 'phoneNumberInput')
+            phoneNumberInputBox.classList.add('inputBox')
+            
+            inputNameLabel.appendChild(nameInputBox)
+            inputPhoneNumberLabel.appendChild(phoneNumberInputBox)
+            
+            createLeadButton.classList.add('goToButton')
             createLeadButton = document.createElement('button')
             createLeadButton.setAttribute('data-id', index)
             createLeadButton.innerText = 'Create A Lead +'
-            createLeadButton.style.backgroundColor = 'lightGreen'
-            createLeadButton.style.borderRadius = '25px'
-            createLeadButton.style.padding = '5px'
-            createLeadButton.style.fontWeight = 'bold'
-            
+
             createLeadButton.addEventListener("click", async (e) => {
+              console.log(nameInputBox.value, phoneNumberInputBox.value)
+              let manuallyInputedLead = {
+                  name: nameInputBox.value,
+                  phoneNumber: phoneNumberInputBox.value
+              }
+              eventData = {
+                ...eventData, 
+                leadInput: {...manuallyInputedLead}
+              }
               response.type = 'newlyCreatedLead'
               response.requestToCreateCusty = false
+              
               let value  = e.target.getAttribute('data-id')
               const parentCallLogBox = document.querySelector(`[data-id="${value}"]`)
-              
               e.target.disabled = true
-             
+              
               let createPDCustyResponse = await createPDCusty()
               response.data = createPDCustyResponse 
       
-          let foundDocument = document.createElement('div')
-          
-          foundDocument.style.marginTop = '15px'
-          foundDocument.style.fontSize = '18px'
-          foundDocument.innerText = 'Congrats a lead was created and contains the following information!'
-          foundDocument.style.fontWeight = 'bold'
-          parentCallLogBox.appendChild(foundDocument)
+            let foundDocument = document.createElement('div')
+            
+            foundDocument.style.marginTop = '15px'
+            foundDocument.style.fontSize = '18px'
+            foundDocument.innerText = 'Congrats a lead was created and contains the following information!'
+            foundDocument.style.fontWeight = 'bold'
+            parentCallLogBox.appendChild(foundDocument)
 
-          let leadNameTitle = document.createElement('div')
-          leadNameTitle.innerText = `Title: ${createPDCustyResponse?.data?.title}`
-          parentCallLogBox.appendChild(leadNameTitle)
-          
-          let leadIdTitle = document.createElement('div')
-          leadIdTitle.innerText = `ID: ${createPDCustyResponse.data.id}`
-          parentCallLogBox.appendChild(leadIdTitle)
+            let leadNameTitle = document.createElement('div')
+            leadNameTitle.innerText = `Title: ${createPDCustyResponse?.data?.title}`
+            parentCallLogBox.appendChild(leadNameTitle)
+            
+            let leadIdTitle = document.createElement('div')
+            leadIdTitle.innerText = `ID: ${createPDCustyResponse.data.id}`
+            parentCallLogBox.appendChild(leadIdTitle)
 
-          let isArchivedTitle = document.createElement('div')
-          isArchivedTitle.innerText = `Is Archived?: ${createPDCustyResponse.data.is_archived}`
-          parentCallLogBox.appendChild(isArchivedTitle)
-          
-          let personTab = document.createElement('div')
-          personTab.innerText = 'Person'
-          personTab.style.fontWeight = 'bold'
-          parentCallLogBox.appendChild(personTab)
+            let isArchivedTitle = document.createElement('div')
+            isArchivedTitle.innerText = `Is Archived?: ${createPDCustyResponse.data.is_archived}`
+            parentCallLogBox.appendChild(isArchivedTitle)
+            
+            let personTab = document.createElement('div')
+            personTab.innerText = 'Person'
+            personTab.style.fontWeight = 'bold'
+            parentCallLogBox.appendChild(personTab)
 
-          let personIdTitle = document.createElement('div')
-          personIdTitle.innerText = `ID: ${createPDCustyResponse.data.id}`
-          parentCallLogBox.appendChild(personIdTitle)
-          
-          let ownerTab = document.createElement('div')
-          ownerTab.innerText = 'Owner'
-          ownerTab.style.fontWeight = 'bold'
-          parentCallLogBox.appendChild(ownerTab)
+            let personIdTitle = document.createElement('div')
+            personIdTitle.innerText = `ID: ${createPDCustyResponse.data.id}`
+            parentCallLogBox.appendChild(personIdTitle)
+            
+            let ownerTab = document.createElement('div')
+            ownerTab.innerText = 'Owner'
+            ownerTab.style.fontWeight = 'bold'
+            parentCallLogBox.appendChild(ownerTab)
 
-          let ownerIdTitle = document.createElement('div')
-          ownerIdTitle.innerText = `ID: ${createPDCustyResponse.data.owner_id}`
-          parentCallLogBox.appendChild(ownerIdTitle)
+            let ownerIdTitle = document.createElement('div')
+            ownerIdTitle.innerText = `ID: ${createPDCustyResponse.data.owner_id}`
+            parentCallLogBox.appendChild(ownerIdTitle)
 
-       
-          let goToLeadButton = document.createElement('button')
-          goToLeadButton.innerText = 'Open Lead In Pipedrive'
-          parentCallLogBox.appendChild(goToLeadButton)
-
-            goToLeadButton.style.backgroundColor = 'lightGreen'
-            goToLeadButton.style.borderRadius = '25px'
-            goToLeadButton.style.padding = '5px'
-            goToLeadButton.style.fontWeight = 'bold'
-            goToLeadButton.style.marginTop = '10px'
-            goToLeadButton.onclick = () => window.open(
-              `https://braustinmobilehomes.pipedrive.com/leads/inbox/${createPDCustyResponse.data.id}`,
-              "_blank"
-            );
+        
+            let goToLeadButton = document.createElement('button')
+            goToLeadButton.innerText = 'Open Lead In Pipedrive'
+            parentCallLogBox.appendChild(goToLeadButton)
+              goToLeadButton.classList.add('goToButton')
+              goToLeadButton.onclick = () => window.open(
+                `https://braustinmobilehomes.pipedrive.com/leads/inbox/${createPDCustyResponse.data.id}`,
+                "_blank"
+              );
             })
-            callLogBox.appendChild(createLeadButton)
-            return
+              innerCallLogBox.appendChild(createLeadButton)
+              return
           }
           let foundDocument = document.createElement('div')
           foundDocument.style.marginTop = '15px'
           foundDocument.style.fontSize = '18px'
           foundDocument.innerText = 'Found Document'
           foundDocument.style.fontWeight = 'bold'
-          callLogBox.appendChild(foundDocument)
+          innerCallLogBox.appendChild(foundDocument)
 
           let leadNameTitle = document.createElement('div')
           leadNameTitle.innerText = `Title: ${response?.data?.title}`
-          callLogBox.appendChild(leadNameTitle)
+          innerCallLogBox.appendChild(leadNameTitle)
           
           let leadIdTitle = document.createElement('div')
           leadIdTitle.innerText = `ID: ${response?.data?.id}`
-          callLogBox.appendChild(leadIdTitle)
+          innerCallLogBox.appendChild(leadIdTitle)
 
           let isArchivedTitle = document.createElement('div')
           isArchivedTitle.innerText = `Is Archived?: ${response?.data?.is_archived}`
-          callLogBox.appendChild(isArchivedTitle)
+          innerCallLogBox.appendChild(isArchivedTitle)
           
           let personTab = document.createElement('div')
           personTab.innerText = 'Person'
           personTab.style.fontWeight = 'bold'
-          callLogBox.appendChild(personTab)
+          innerCallLogBox.appendChild(personTab)
 
           let personNameTitle = document.createElement('div')
           personNameTitle.innerText = `Name: ${response?.data?.person.name}`
-          callLogBox.appendChild(personNameTitle)
+          innerCallLogBox.appendChild(personNameTitle)
           
           let personIdTitle = document.createElement('div')
           personIdTitle.innerText = `ID: ${response?.data?.id}`
-          callLogBox.appendChild(personIdTitle)
+          innerCallLogBox.appendChild(personIdTitle)
           
           let ownerTab = document.createElement('div')
           ownerTab.innerText = 'Owner'
           ownerTab.style.fontWeight = 'bold'
-          callLogBox.appendChild(ownerTab)
+          innerCallLogBox.appendChild(ownerTab)
 
           let ownerIdTitle = document.createElement('div')
           ownerIdTitle.innerText = `ID: ${response?.data?.owner?.id}`
-          callLogBox.appendChild(ownerIdTitle)
+          innerCallLogBox.appendChild(ownerIdTitle)
 
        
           let goToLeadButton = document.createElement('button')
           goToLeadButton.innerText = 'Open Lead In Pipedrive'
-          callLogBox.appendChild(goToLeadButton)
+          innerCallLogBox.appendChild(goToLeadButton)
           goToLeadButton.onclick = () => window.open(
             `https://braustinmobilehomes.pipedrive.com/leads/inbox/${response.data.id}`,
             "_blank"
           );
-
-            goToLeadButton.style.backgroundColor = 'lightGreen'
-            goToLeadButton.style.borderRadius = '25px'
-            goToLeadButton.style.padding = '5px'
-            goToLeadButton.style.fontWeight = 'bold'
-            goToLeadButton.style.marginTop = '10px'
+            goToLeadButton.classList.add('goToButton')
           
         } else if (response.type === 'person'){
           let foundDocument = document.createElement('div')
           foundDocument.innerText = 'Found Person'
           foundDocument.style.fontWeight = 'bold'
-          callLogBox.appendChild(foundDocument)
+          innerCallLogBox.appendChild(foundDocument)
 
           let personName = document.createElement('div')
           personName.innerText = `Name: ${response.data.name}`
-          callLogBox.appendChild(personName)
+          innerCallLogBox.appendChild(personName)
 
           let personId = document.createElement('div')
           personId.innerText = `ID: ${response.data.id}`
-          callLogBox.appendChild(personId)
+          innerCallLogBox.appendChild(personId)
 
           let phoneNumberTitle = document.createElement('div')
           phoneNumberTitle.innerText = 'Known Phone Numbers:'
-          callLogBox.appendChild(phoneNumberTitle)
+          innerCallLogBox.appendChild(phoneNumberTitle)
 
           response.data.phones.forEach((number) => {
             let phoneNumber = document.createElement('div')
             phoneNumber.innerText = number
-            callLogBox.appendChild(phoneNumber)
+            innerCallLogBox.appendChild(phoneNumber)
           })
 
           let emailTitle = document.createElement('div')
           emailTitle.innerText = 'Emails:'
-          callLogBox.appendChild(emailTitle)
+          innerCallLogBox.appendChild(emailTitle)
 
           response.data.emails.forEach((email) => {
             let emails = document.createElement('div')
             emails.innerText = email
-            callLogBox.appendChild(emails)
+            innerCallLogBox.appendChild(emails)
           })
 
           let gotToPersonButton = document.createElement('button')
           gotToPersonButton.innerText = 'Open Person In Pipedrive'
-          callLogBox.appendChild(gotToPersonButton)
+          innerCallLogBox.appendChild(gotToPersonButton)
           gotToPersonButton.onclick = () => window.open(`https://braustinmobilehomes.pipedrive.com/person/${response.data.id}`) 
-
-            gotToPersonButton.style.backgroundColor = 'lightGreen'
-            gotToPersonButton.style.borderRadius = '25px'
-            gotToPersonButton.style.padding = '5px'
-            gotToPersonButton.style.fontWeight = 'bold'
-            gotToPersonButton.style.marginTop = '10px'
-          
+            gotToPersonButton.classList.add('goToButton')
         } else if(response.type === 'deal') {
           response?.data?.forEach((response) => {
             
@@ -423,7 +496,7 @@ const lookup = async (eventObj) => {
                 let dealOrLeadData = JSON.stringify(response)
                 // dataDiv.innerText = dealOrLeadData
                 dataDiv.classList.add('callInformation')
-                callLogBox.appendChild(dataDiv)
+                innerCallLogBox.appendChild(dataDiv)
 
                 let dealHeading = document.createElement('div')
                 dealHeading.innerText = 'Found Document'
@@ -478,17 +551,12 @@ const lookup = async (eventObj) => {
 
                 let goToDealButton = document.createElement('button')
           goToDealButton.innerText = 'Open Deal In PipeDrive'
-          callLogBox.appendChild(goToDealButton)
+          innerCallLogBox.appendChild(goToDealButton)
           goToDealButton.onclick = () =>  window.open(
             `https://braustinmobilehomes.pipedrive.com/deal/${response.id}`,
             "_blank"
           );
-            goToDealButton.style.backgroundColor = 'lightGreen'
-            goToDealButton.style.borderRadius = '25px'
-            goToDealButton.style.padding = '5px'
-            goToDealButton.style.fontWeight = 'bold'
-            goToDealButton.style.marginTop = '10px'
-          
+            goToDealButton.classList.add("goToButton")
           })
         } else if(response.type === "newlyCreatedLead"){
           let foundDocument = document.createElement('div')
@@ -497,50 +565,64 @@ const lookup = async (eventObj) => {
           foundDocument.style.fontSize = '18px'
           foundDocument.innerText = 'Congrats a lead was created and contains the following information!'
           foundDocument.style.fontWeight = 'bold'
-          callLogBox.appendChild(foundDocument)
+          innerCallLogBox.appendChild(foundDocument)
 
           let leadNameTitle = document.createElement('div')
           leadNameTitle.innerText = `Title: ${response?.data?.data.title}`
-          callLogBox.appendChild(leadNameTitle)
+          innerCallLogBox.appendChild(leadNameTitle)
           
           let leadIdTitle = document.createElement('div')
           leadIdTitle.innerText = `ID: ${response?.data?.data.id}`
-          callLogBox.appendChild(leadIdTitle)
+          innerCallLogBox.appendChild(leadIdTitle)
 
           let isArchivedTitle = document.createElement('div')
           isArchivedTitle.innerText = `Is Archived?: ${response?.data?.data?.is_archived}`
-          callLogBox.appendChild(isArchivedTitle)
+          innerCallLogBox.appendChild(isArchivedTitle)
           
           let personTab = document.createElement('div')
           personTab.innerText = 'Person'
           personTab.style.fontWeight = 'bold'
-          callLogBox.appendChild(personTab)
+          innerCallLogBox.appendChild(personTab)
 
           let personIdTitle = document.createElement('div')
           personIdTitle.innerText = `ID: ${response?.data?.data?.id}`
-          callLogBox.appendChild(personIdTitle)
+          innerCallLogBox.appendChild(personIdTitle)
           
           let ownerTab = document.createElement('div')
           ownerTab.innerText = 'Owner'
           ownerTab.style.fontWeight = 'bold'
-          callLogBox.appendChild(ownerTab)
+          innerCallLogBox.appendChild(ownerTab)
 
           let ownerIdTitle = document.createElement('div')
           ownerIdTitle.innerText = `ID: ${response?.data?.data?.owner_id}`
-          callLogBox.appendChild(ownerIdTitle)
+          innerCallLogBox.appendChild(ownerIdTitle)
 
        
           let goToLeadButton = document.createElement('button')
           goToLeadButton.innerText = 'Open Lead In Pipedrive'
-          callLogBox.appendChild(goToLeadButton)
-
-            goToLeadButton.style.backgroundColor = 'lightGreen'
-            goToLeadButton.style.borderRadius = '25px'
-            goToLeadButton.style.padding = '5px'
-            goToLeadButton.style.fontWeight = 'bold'
-            goToLeadButton.style.marginTop = '10px'
+          innerCallLogBox.appendChild(goToLeadButton)
+            goToLeadButton.classList.add("goToButton")
         }
   })
+
+  let eventLogicProcessContainer = document.createElement('div')
+      eventLogicProcessContainer.classList.add('eventLogicContainer')
+      callLogBox.appendChild(eventLogicProcessContainer)
+      let eventTitle = document.createElement('div')
+      eventTitle.innerText = 'Events'
+      eventTitle.classList.add('eventTitle')
+      eventLogicProcessContainer.appendChild(eventTitle)
+      eventLogicProcessContainer.style.margin = '10px 0 10px 0'
+      response?.eventLogicProcess?.map((event) => {
+        let processInformation = document.createElement('div')
+        processInformation.innerText = event
+        if(event.includes('found')) {
+          processInformation.style.color = 'green'
+        } else {
+          processInformation.style.color = 'red'
+        }
+        eventLogicProcessContainer.appendChild(processInformation)
+      })
   let { type } = response
 
   if (type === "deal") {

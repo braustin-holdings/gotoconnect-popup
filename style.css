@@ -10,6 +10,8 @@ html {
 
 }
 
+
+
 .callInformation {
     font-size: 18px;
 }
@@ -18,13 +20,13 @@ html {
     font-size: 18px;
     font-weight: bold;
 }
+
 .closeButton {
     background: lightgreen;
     padding: 10px;
     font-weight: bold;
     border-radius: 25px;
-    border: 1px solid black;
-    
+    border: 1px solid black;   
 }
 
 .buttonContainer {
@@ -33,11 +35,12 @@ html {
     margin-right: 30px;
 }
 #box {
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    box-shadow: rgba(2, 2, 2, 0.80) 0px 3px 8px;
     background-color: white;
-    margin: 10px 30px 30px 30px;
+    margin: 20px 30px 30px 30px;
     border-radius: 10px;
     padding: 5px;
+   
 }
 
 #sessionTitle {
@@ -81,4 +84,49 @@ html {
 
 #salesRepExtension { 
     font-size: 18px;
+}
+
+.inputBox { 
+    width: fit-content;
+    margin: 5px 0px 5px 0;
+}
+
+.icon {
+    font-size: 25px;
+    color: rgb(12, 177, 12);
+}
+#salesRepTitle {
+    font-size: 25px;
+}
+.lineInformation {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#salesRepContainer {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.eventTitle {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.innerCallLogBox {
+    display: flex;
+    flex-direction: column;
+}
+
+.goToButton {
+    background-color: lightgreen;
+    border-radius: 25px;
+    padding: 5px;
+    font-weight: bold;
+    margin-top: 10px;
+    width: fit-content;
+}
+.callLogBox {
+    display: flex;
+    justify-content: space-between;
 }
